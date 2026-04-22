@@ -1,0 +1,255 @@
+# Threat Identification Report: NordFinans Bank AB
+
+---
+
+## Threat 1: SWIFT Fraudulent Payment Injection via Compromised Operator Credential
+
+**Threat Description**
+
+A financially motivated threat actor — consistent with the tradecraft of Lazarus Group (DPRK) or similar SWIFT-targeting adversaries — conducts a targeted intrusion culminating in the issuance of fraudulent SWIFT payment instructions through NordFinans's Alliance Lite2 environment. The attacker does not break SWIFT itself; they abuse legitimate operator credentials to submit authentic-looking MT 103/MT 202 COV payment messages.
+
+**Why Relevant to NordFinans**
+
+NordFinans operates Alliance Lite2 — a commonly targeted configuration (as seen in the 2016 Bangladesh Bank heist and subsequent copycat attacks). CyberArk vaults approximately 200 privileged accounts including SWIFT operators, which is a strong control. However, the known gap that MFA is *not yet enforced for all internal application access* creates a realistic path: if the SWIFT operator workstation or jump host is accessible without MFA enforcement, credential theft via a phishing or lateral movement campaign could bypass CyberArk's vaulting by hijacking an active authenticated session rather than extracting credentials. The after-hours SOC coverage gap (18:00–08:00 CET) is particularly dangerous here — SWIFT transactions are often routed cross-timezone, and a fraudulent payment submission during off-hours would face degraded detection capability.
+
+**Attack Vector**
+
+1. Spearphishing email targeting a SWIFT operator or treasury staff member, delivering a malicious attachment exploiting a .NET or Office macro vulnerability, establishing initial C2 foothold via a living-off-the-land (LotL) technique to evade CrowdStrike behavioral detection.
+2. Lateral movement through the internal network using pass-the-hash or Kerberoasting against hybrid AD service accounts.
+3. Pivoting into the SWIFT secure zone (if network segmentation has any exploitable misconfiguration), or waiting for a legitimate operator session to the SWIFT workstation and hijacking it.
+4. Submitting fraudulent SWIFT MT 103 payment messages during off-hours to correspondent bank accounts under attacker control, structured to stay under anomaly thresholds.
+5. Deleting or corrupting SWIFT transaction logs to delay detection.
+
+**Potential Impact**
+
+Direct financial loss in the range of €5M–€50M+ per incident, consistent with historical SWIFT fraud events. Regulatory notifications to Finansinspektionen, EBA, and SWIFT CSP mandatory reporting. Reputational damage affecting the publicly traded share price. DORA incident reporting obligations triggered. If the secure zone is compromised rather than merely the operator workstation, recovery complexity escalates significantly.
+
+---
+
+## Threat 2: After-Hours Ransomware Deployment via Hybrid Active Directory Compromise
+
+**Threat Description**
+
+A RaaS (Ransomware-as-a-Service) affiliate group — such as those operating LockBit 3.0, BlackCat/ALPHV, or their successors — gains initial access during business hours via phishing or VPN credential abuse, establishes persistence quietly, and triggers mass ransomware deployment during the 18:00–08:00 CET window when only the external Nordic MSSP is monitoring. The attack targets the hybrid AD environment as a propagation backbone, encrypting both on-premises servers (including T24-adjacent systems) and Azure-connected endpoints simultaneously.
+
+**Why Relevant to NordFinans**
+
+This threat is acutely specific to NordFinans's configuration: the after-hours SOC gap is the single largest structural vulnerability in the profile. The MSSP monitors via VPN and API integration but has less institutional context than internal analysts — alert triage quality for edge-case behavioral detections will be lower, and escalation latency higher. The hybrid AD (Azure AD Connect synchronizing on-premises AD to Entra ID) means that a compromised domain admin account provides a pivot point into both the on-premises core banking network *and* Azure-hosted workloads simultaneously. The T24 core banking system running Linux/Oracle with some legacy Java customizations presents a non-Windows target that CrowdStrike Falcon may have different detection fidelity for, depending on agent coverage configuration.
+
+**Attack Vector**
+
+1. Initial compromise via spearphishing targeting a remote worker (40% hybrid staff), capturing VPN credentials through a credential-harvesting page, or exploiting a known vulnerability in Cisco AnyConnect during the patch cycle gap between quarterly Qualys scans.
+2. Internal reconnaissance using BloodHound/SharpHound against AD to map privileged group memberships and identify domain controller access paths.
+3. Kerberoasting or AS-REP roasting to obtain crackable service account ticket hashes, escalating to Domain Admin.
+4. Using Azure AD Connect's synchronization account (which often has high privileges in both environments) to pivot from on-premises AD into Azure tenant, disabling CrowdStrike agent updates, and accessing Azure VM management.
+5. Pre-positioning ransomware payload across file servers, backup infrastructure, and Azure VMs during business hours.
+6. Triggering encryption at ~01:00 CET — maximum dwell time before Swedish business hours resume, minimum SOC response capacity.
+
+**Potential Impact**
+
+Operational outage breaching T24's declared RTO of 4 hours and RPO of 1 hour if backup infrastructure is also encrypted (tape offsite provides resilience but restoration from tape is slow). Regulatory reporting under DORA ICT incident requirements within 4 hours of classification. GDPR breach notification obligations if customer PII is exfiltrated prior to encryption (double-extortion is now standard RaaS practice). Nasdaq Stockholm trading halt disclosure obligations as a public company. Estimated recovery cost for a comparable-size financial institution: €10M–€40M including ransom consideration, recovery, regulatory fines, and reputational remediation.
+
+---
+
+## Threat 3: Malicious or Compromised Third-Party Provider (TPP) Exploiting Open Banking APIs
+
+**Threat Description**
+
+An attacker either registers a fraudulent TPP with a Nordic financial regulator under false pretenses, or compromises a legitimate authorized TPP's OAuth client credentials, and then weaponizes NordFinans's PSD2-compliant Open Banking API endpoints to conduct mass account enumeration, unauthorized payment initiation, or bulk customer PII exfiltration — all using valid, authorized API tokens.
+
+**Why Relevant to NordFinans**
+
+PSD2 mandates that NordFinans grant API access to any authorized TPP — the regulatory framework creates an obligation to expose sensitive account data and payment initiation capabilities. The API gateway (Azure API Management with OAuth 2.0 / OpenID Connect) is the primary control boundary, but its security is only as strong as the TPP ecosystem's hygiene. NordFinans has limited visibility and control over third-party TPPs listed as a "medium criticality" dependency with no detail on vetting rigor. The self-assessed gap in third-party risk management maturity compounds this: if the vendor assessment program is immature, the ongoing security posture of authorized TPPs may not be re-evaluated after initial onboarding.
+
+**Attack Vector**
+
+1. *Rogue TPP scenario:* Attacker establishes a front-company fintech, obtains TPP authorization from Finansinspektionen under Sweden's PSD2 implementation (plausible given regulatory processing pressures), and uses the legitimate API access to systematically enumerate account balances and transaction histories for intelligence gathering or direct fraud facilitation.
+2. *Compromised TPP scenario:* Attacker breaches a small, authorized budgeting or accounting app TPP (with weaker security than NordFinans), steals OAuth client credentials or long-lived refresh tokens, and uses them against NordFinans APIs to initiate fraudulent payments from customer accounts — appearing as legitimate authorized payment initiation.
+3. In either case, traffic appears legitimate to the Azure API Management WAF because it uses valid bearer tokens, passes rate limiting by distributing requests across time and accounts, and mimics normal TPP behavior.
+
+**Potential Impact**
+
+Customer financial fraud via unauthorized payment initiation (direct PSD2 liability exposure). GDPR data breach notification if customer account data is exfiltrated at scale — 500,000 customer records across four EU jurisdictions creates maximum GDPR penalty exposure (up to 4% of global annual turnover). PSD2 incident reporting to Finansinspektionen. Loss of customer trust in digital banking services. Legal liability to affected customers. Regulatory scrutiny of NordFinans's TPP vetting process even though the vector is a third party.
+
+---
+
+## Threat 4: Supply Chain Attack Targeting Azure DevOps CI/CD Pipelines
+
+**Threat Description**
+
+An attacker injects malicious code into NordFinans's software delivery pipeline — either by compromising a developer's Azure DevOps credentials, exploiting a dependency confusion vulnerability in internal package feeds, or poisoning a third-party library used by internal .NET, Java, or Python applications — resulting in backdoored application code being deployed into the web banking portal or Open Banking API backend.
+
+**Why Relevant to NordFinans**
+
+NordFinans develops internal banking applications across three languages (.NET, Java, Python) and uses Azure DevOps for CI/CD. The development environment is a separate network zone, but if pipeline automation service accounts have deployment access to production Azure App Service environments, a compromised pipeline effectively becomes a privileged production deployment mechanism. The known gap around Azure workload security controls still being standardized is directly relevant here — if Azure DevOps pipeline service principal permissions are overly broad during migration, a pipeline compromise could achieve production code execution without touching traditional attack paths. Dependency confusion attacks (exploiting the priority of public over private package registries) require only knowledge of internal package names, which may be inferable from job postings or GitHub leakage.
+
+**Attack Vector**
+
+1. *Dependency confusion:* Attacker identifies an internal package name (e.g., `nordfinans-auth-utils`) from a developer job posting or public code snippet, publishes a malicious package with the same name to PyPI/npmjs/Maven Central at a higher version number, and exploits misconfigured package managers that check public registries before private Azure Artifacts feeds. The malicious package executes during build, exfiltrating pipeline secrets or installing a backdoor.
+2. *Credential theft path:* Developer working remotely falls victim to adversary-in-the-middle phishing, yielding Azure DevOps OAuth token. Attacker modifies a pipeline YAML to include a post-build script that injects a web shell or credential harvesting module into the compiled application artifact before it is deployed to Azure App Service.
+3. *Production deployment:* Backdoored web banking application is deployed through normal change management, bypassing perimeter security controls entirely. Attacker waits for deployment before activating the implant.
+
+**Potential Impact**
+
+Persistent access to the web banking application backend, with ability to intercept customer credentials, session tokens, and transaction data in real-time. If the pipeline has permissions to Azure AD (common for DevOps service principals), broader tenant compromise is possible. This is a high-dwell, low-noise attack — time to detection could be months, maximizing customer data exposure. GDPR breach for 200,000+ active monthly users. Integrity compromise of banking services affects Finansinspektionen ICT governance compliance (FFFS 2014:5).
+
+---
+
+## Threat 5: Euronet ATM Processor Compromise Leading to Core Banking Lateral Movement
+
+**Threat Description**
+
+An attacker targets Euronet (NordFinans's third-party ATM processor), compromising the dedicated VPN tunnel or Euronet's side of the integration, and uses that trusted connection as a stepping stone into NordFinans's core banking environment — either to facilitate ATM jackpotting/cash-out fraud at scale, or to pivot laterally toward higher-value targets inside the bank.
+
+**Why Relevant to NordFinans**
+
+Euronet manages NordFinans's 120-ATM network with a dedicated VPN connection to the core banking system. This is a medium-criticality third-party dependency, but the connection is to the *critical* core banking environment. The self-assessed gap in third-party risk management maturity means Euronet's security controls may not have been comprehensively assessed or contractually mandated. Historically, ATM processor compromises have been a proven attack path: in 2016, attackers compromised payment processors to conduct coordinated ATM cash-out operations globally. For NordFinans, the ATM VPN represents a potentially lower-security path into the core banking network compared to the hardened internal perimeter.
+
+**Attack Vector**
+
+1. Attacker compromises Euronet's infrastructure through a separate intrusion (Euronet serves many banks, making it a high-value supply chain target).
+2. From Euronet's environment, attacker has authenticated VPN access to NordFinans's ATM-facing network segment.
+3. Attacker probes the VPN termination point and any hosts in that segment for vulnerabilities, leveraging the implicit trust granted to Euronet's VPN.
+4. *Cash-out scenario:* Attacker modifies ATM software to disable cash dispensing limits and coordinates a network of money mules to simultaneously empty all 120 ATMs during a weekend.
+5. *Lateral movement scenario:* Attacker uses the ATM network segment as a beachhead, exploiting any insufficient segmentation between it and other internal zones, progressing toward core banking or internal management systems.
+
+**Potential Impact**
+
+*Cash-out:* Direct financial loss from 120 ATMs simultaneously; at €20,000 per ATM maximum capacity, potential gross loss €2.4M in a single operation. *Lateral movement:* If this path reaches core banking or AD, it escalates to the highest-tier threats (SWIFT, customer data). Customer disruption from ATM unavailability. Reputational impact and Finansinspektionen notification obligations.
+
+---
+
+## Threat 6: Nordic MSSP Compromise as an Intelligence-Gathering or Access Vector
+
+**Threat Description**
+
+A sophisticated threat actor — consistent with nation-state tradecraft targeting Nordic financial sector intelligence — compromises the external Nordic MSSP that provides NordFinans's after-hours SOC monitoring, using the MSSP's privileged VPN and API integration access to conduct passive intelligence collection or active intrusion against NordFinans under the cover of legitimate security monitoring traffic.
+
+**Why Relevant to NordFinans**
+
+The MSSP has a VPN and API integration with NordFinans's environment — this is precisely the kind of trusted third-party access that enables "island-hopping" attacks, as demonstrated in the 2020 SolarWinds compromise. During the 18:00–08:00 window, the MSSP is the *primary* security monitoring layer, meaning an attacker operating from within the MSSP has maximum dwell time with minimum internal detection capability. The MSSP likely also has access to NordFinans's Sentinel SIEM data — compromising it provides the attacker a real-time view of what NordFinans's defenders can and cannot see, enabling the attacker to operate below detection thresholds with precision. This is particularly attractive for a nation-state actor interested in financial intelligence (transaction data on Nordic companies and counterparties) rather than immediate fraud.
+
+**Attack Vector**
+
+1. Attacker identifies the MSSP as a managed security provider serving multiple Nordic financial institutions, making it a high-leverage single compromise target.
+2. MSSP is compromised via spearphishing of an MSSP analyst, or via a vulnerability in the MSSP's own tooling (e.g., RMM platform, SIEM agent, or ticket management system).
+3. Attacker uses the MSSP's existing authenticated VPN connection to NordFinans to conduct low-and-slow reconnaissance, avoiding behaviors that would trigger detections the attacker can now monitor in real-time via Sentinel API access.
+4. Exfiltration of Sentinel log data (revealing the full topology of NordFinans's security controls and gaps), followed by targeted credential harvesting or data exfiltration during off-hours.
+
+**Potential Impact**
+
+Persistent, undetected access of potentially months duration. Nation-state level intelligence collection on customer transaction data (economic espionage). Full mapping of NordFinans's security architecture, enabling a follow-on precision attack against SWIFT or core banking at a time of the attacker's choosing. DORA third-party ICT incident reporting obligations. Potential systemic risk if the same MSSP serves multiple Nordic financial institutions.
+
+---
+
+## Threat 7: Temenos T24 Vendor Support VPN Exploitation
+
+**Threat Description**
+
+An attacker targets the vendor support VPN connection maintained by Temenos for T24 core banking support and maintenance, using it as an authenticated, trusted access path directly into the most critical asset in NordFinans's environment — the core banking system — bypassing the hardened internal perimeter entirely.
+
+**Why Relevant to NordFinans**
+
+Temenos T24 is listed as "critical" in NordFinans's dependency inventory with a "vendor support VPN" connection. Vendor remote access channels to core banking systems are among the most dangerous trust relationships in any financial institution's architecture. Temenos support staff with active VPN access may have elevated, direct access to the T24 application and its Oracle database — access levels that may not be fully mediated by CyberArk depending on how the support VPN is architected. The known gap around legacy Java components in T24 customizations also creates a vulnerability surface that may be present in the on-premises environment and known to Temenos support personnel.
+
+**Attack Vector**
+
+1. Attacker targets Temenos's internal infrastructure (Temenos serves hundreds of global banks, making it an extremely high-value supply chain target).
+2. Once inside Temenos's environment, attacker identifies VPN credentials or certificates used by support staff for NordFinans-specific access.
+3. Using the vendor support VPN, attacker connects to T24 environment with legitimate-appearing Temenos source identity.
+4. Direct access to Oracle database enables: bulk customer data exfiltration, transaction record manipulation, account balance alteration, or deployment of a persistent backdoor within T24's application layer.
+5. VPN traffic appears legitimate to perimeter controls; detection relies entirely on behavioral anomaly detection within T24 logging (which feeds to Sentinel via syslog — detection latency depends on rule fidelity for T24-specific log patterns).
+
+**Potential Impact**
+
+Direct manipulation of core banking records affecting 500,000 retail and 12,000 SME customer accounts — the highest-impact data integrity scenario possible. Mass customer PII exfiltration for full GDPR maximum penalty exposure. Potential for fraudulent account modifications that are difficult to detect and reverse. The integrity of transactional records is a foundational trust element — if compromised, remediation requires comprehensive reconciliation across all systems, potentially weeks of work. Existential reputational risk for a publicly traded institution.
+
+---
+
+## Threat 8: Targeted Spearphishing Campaign Exploiting M365 to Conduct Business Email Compromise (BEC) Against Treasury Operations
+
+**Threat Description**
+
+A financially motivated threat actor conducts a tailored BEC campaign targeting NordFinans treasury or payments staff, either by compromising a legitimate M365 mailbox via adversary-in-the-middle (AiTM) phishing that bypasses MFA, or by impersonating executive or CFO email to redirect legitimate interbank transfers or SME payment orders to attacker-controlled accounts.
+
+**Why Relevant to NordFinans**
+
+NordFinans processes ~€800M in annual revenue across retail and commercial banking, with SWIFT-connected interbank flows and ~12,000 SME business customers making regular commercial payments. M365 with Exchange Online is the collaboration backbone, and while Microsoft Defender for Office 365 is deployed, AiTM phishing frameworks (such as Evilginx2 or Modlishka) can intercept session cookies post-MFA authentication, yielding authenticated mailbox access without knowing the password or MFA factor. Treasury and payments staff are specifically targeted because they have authority to initiate or approve large-value transfers. The hybrid work model (40% of staff working remotely 2–3 days/week) expands the AiTM attack surface, as remote workers are more likely to authenticate through public networks and less likely to recognize anomalous login prompts.
+
+**Attack Vector**
+
+1. Attacker conducts OSINT on NordFinans (LinkedIn, Nasdaq filings, press releases) to identify treasury staff, CFO, and senior payments administrators by name and role.
+2. AiTM phishing site mimics Microsoft 365 login, relaying credentials and MFA in real-time to Microsoft, then capturing the post-authentication session cookie.
+3. Attacker uses session cookie to access the mailbox via Microsoft Graph API or Outlook Web Access, establishing email forwarding rules to monitor payment-related correspondence invisibly.
+4. At the right moment — e.g., when a large SME supplier payment is being processed — attacker modifies a payment instruction email in transit or sends a spoofed CFO instruction to override payment details.
+5. Alternatively, attacker accesses the M365 environment and exfiltrates sensitive internal communications about SWIFT credentials, vendor negotiations, or M&A activity for intelligence value.
+
+**Potential Impact**
+
+Direct financial loss from fraudulently redirected payments (BEC losses typically range from €50K–€5M per incident). If SME customer payment instructions are intercepted, NordFinans bears reputational and potential liability exposure. Mailbox access may also reveal sensitive regulatory correspondence with Finansinspektionen or internal audit findings — intelligence of significant value to competitors or nation-state actors. GDPR breach if customer data is accessed via compromised mailbox.
+
+---
+
+## Threat 9: Azure Cloud Misconfiguration Exploitation During Migration
+
+**Threat Description**
+
+During NordFinans's ongoing migration of supporting services to Azure, insecure configurations — overly permissive storage account access policies, misconfigured Azure App Service authentication settings, over-privileged service principal permissions, or publicly exposed Azure management APIs — are exploited by an opportunistic or targeted attacker to gain unauthorized access to customer data or internal systems without requiring any initial endpoint compromise.
+
+**Why Relevant to NordFinans**
+
+The organizational profile explicitly identifies this gap: "security controls for Azure workloads still being standardized." Cloud migrations are particularly high-risk periods because infrastructure is provisioned rapidly by development and operations teams who may prioritize functionality over security posture, and because the perimeter model that protects on-premises assets does not automatically transfer to cloud environments. Azure Storage Accounts, Function Apps, and API backends provisioned during migration may be temporarily publicly accessible or use weak Shared Access Signature (SAS) tokens. The Azure DevOps CI/CD pipelines, if deploying to staging environments, may use service principals with production-level permissions for convenience.
+
+**Attack Vector**
+
+1. Attacker uses automated cloud asset discovery tooling (Shodan, BIMI-Inspector, or cloud-specific scanners) to identify Azure resources associated with NordFinans's Azure tenant (discoverable via the bank's public domain and Azure Front Door configuration headers).
+2. Discovers an Azure Blob Storage account containing customer statement PDFs or transaction exports, misconfigured with anonymous read access during a migration staging operation.
+3. Alternatively, discovers an Azure Function App or App Service with a misconfigured authentication bypass, or a management API endpoint using a leaked SAS token committed to a developer's public GitHub repository.
+4. Accesses customer data or internal application data at scale without authentication, or uses the initial foothold to escalate within the Azure tenant via misconfigured Managed Identity permissions.
+
+**Potential Impact**
+
+Mass customer data exposure (PII, financial records) triggering GDPR maximum penalty exposure — with 500,000 customers across four EU jurisdictions, this is a €32M+ theoretical ceiling fine. The passive nature of storage account enumeration means no intrusion alarms may trigger — first indication may be attacker publishing the data or regulatory notification from a third party. DORA ICT incident reporting obligations. Reputational damage to a publicly traded institution. The migration period extends the exposure window; this threat remains relevant for the duration of the ongoing cloud transition.
+
+---
+
+## Threat 10: Credential Stuffing and Account Takeover Against Web Banking Portal
+
+**Threat Description**
+
+Automated credential stuffing attacks — using credentials from unrelated third-party data breaches — are directed at NordFinans's web banking portal login endpoint, achieving fraudulent account access for customers who reuse passwords across services. Unlike a sophisticated APT, this is a high-volume, low-sophistication threat that generates significant fraud losses and customer harm at scale.
+
+**Why Relevant to NordFinans**
+
+With 200,000 active monthly web banking users, NordFinans's login surface is substantial. Credential stuffing is endemic to retail banking and is not blocked by Azure Front Door's WAF without specific anti-automation rules, as the attack uses valid credentials from other breaches — not SQL injection or XSS patterns. The web banking portal uses .NET-based authentication, and while biometric authentication is available on mobile, web portal users may authenticate with username/password only (the profile does not indicate universal MFA for customer-facing portals, which is distinct from employee MFA). The bank's own customers are likely to have credentials exposed in large public breach datasets (Collection #1, etc.), and attackers cross-reference those credentials against banking portals as a high-return targeting strategy.
+
+**Attack Vector**
+
+1. Attacker acquires credential combo lists from dark web markets or breach compilation databases, filtering for Swedish email domains (@hotmail.se, @gmail.com with Swedish-pattern usernames, etc.) to increase hit rates against a Nordic bank.
+2. Deploys credential stuffing tool (Sentry MBA, STORM, or custom tooling) with rotating residential proxy infrastructure to bypass IP-based rate limiting and geolocation controls.
+3. Successful logins (hit rate typically 0.1–2% of tested credentials) trigger low-value reconnaissance: checking account balances, enabling attacker to prioritize targets.
+4. Fraudulent transactions initiated via the web banking portal to money mule accounts, or profile data harvested for downstream social engineering (calling bank support to initiate transfers).
+5. On mobile, biometric authentication may be bypassed if the attacker installs the app on a new device using hijacked email access for account recovery.
+
+**Potential Impact**
+
+Direct customer financial fraud losses — NordFinans bears liability under Swedish banking consumer protection rules (konsumentskyddslagen). Volume-based: even a 0.5% success rate across 200,000 users yields 1,000 compromised accounts. Aggregate fraud loss per incident: potentially €500K–€5M depending on account balances targeted. GDPR notification obligations if personal data is accessed. Reputational harm in retail banking is disproportionate — customers care deeply about banking security, and news coverage of account compromises drives customer attrition.
+
+---
+
+## Summary Matrix
+
+| # | Threat | Primary Asset at Risk | Actor Type | Likelihood | Potential Impact |
+|---|---|---|---|---|---|
+| 1 | SWIFT fraudulent payment injection | SWIFT infrastructure | APT / Financial crime | Medium | Critical |
+| 2 | After-hours ransomware via hybrid AD | Core banking + Azure | RaaS affiliate | High | Critical |
+| 3 | Malicious/compromised TPP via Open Banking API | Customer PII + payments | Fraud / APT | Medium | High |
+| 4 | CI/CD pipeline supply chain attack | Web banking / APIs | APT / Criminal | Medium | High |
+| 5 | Euronet ATM processor compromise | Core banking + cash | Financial crime | Medium | High |
+| 6 | Nordic MSSP compromise (island-hopping) | All assets via SIEM access | Nation-state | Low-Medium | Critical |
+| 7 | Temenos vendor support VPN exploitation | Core banking (T24) | APT / Supply chain | Low-Medium | Critical |
+| 8 | BEC via AiTM phishing against treasury | Financial transfers + M365 | Financial crime | High | High |
+| 9 | Azure misconfiguration during migration | Customer data / Azure tenant | Opportunistic / APT | High | High |
+| 10 | Credential stuffing against web banking | Retail customer accounts | Organized fraud | Very High | Medium |
+
+---

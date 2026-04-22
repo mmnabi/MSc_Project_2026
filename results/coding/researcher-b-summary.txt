@@ -1,0 +1,146 @@
+                                                                                                                                                                                                     │
+│ DROP 6 rows (B stricter on GP3 — all are plausible single-source mappings):                                                                                                                            │
+│                                                                                                                                                                                                        │
+│ ┌───────────────┬───────────────────────────────────────────────────────────────────────────────────────┐                                                                                              │
+│ │ Row to remove │                            Rationale for B's disagreement                             │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-001 → T1567 │ "Double extortion" doesn't specify web service exfil; B prefers T1041 (C2 channel)    │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-005 → T1656 │ BEC impersonation is the social engineering method, already covered by T1566          │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-012 → T1553 │ MotW bypass is too specific an inference from "novel delivery mechanisms"             │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-034 → T1185 │ Digital skimming is input capture (T1056), not browser session hijacking              │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-036 → T1005 │ Espionage "data collection" is too vague per GP5 without specifying collection method │                                                                                              │
+│ ├───────────────┼───────────────────────────────────────────────────────────────────────────────────────┤                                                                                              │
+│ │ T-038 → T1071 │ Cloud C2 already mapped as T1102 (Web Service); T1071 is redundant                    │                                                                                              │
+│ └───────────────┴───────────────────────────────────────────────────────────────────────────────────────┘                                                                                              │
+│                                                                                                                                                                                                        │
+│ ADD 4 rows (B more generous on EC1 kill-chain implications):                                                                                                                                           │
+│                                                                                                                                                                                                        │
+│ ┌───────────────┬────────────┬─────────────────────────────────────────────────────────────────────────────┐                                                                                           │
+│ │  Row to add   │ Confidence │                                  Rationale                                  │                                                                                           │
+│ ├───────────────┼────────────┼─────────────────────────────────────────────────────────────────────────────┤                                                                                           │
+│ │ T-037 → T1036 │ plausible  │ "Blend into normal administrative activity" explicitly implies masquerading │                                                                                           │
+│ ├───────────────┼────────────┼─────────────────────────────────────────────────────────────────────────────┤                                                                                           │
+│ │ T-037 → T1070 │ plausible  │ APT LOTL lateral movement strongly implies covering tracks                  │                                                                                           │
+│ ├───────────────┼────────────┼─────────────────────────────────────────────────────────────────────────────┤                                                                                           │
+│ │ T-026 → T1562 │ plausible  │ DDoS consuming SOC attention effectively degrades detection capability      │                                                                                           │
+│ ├───────────────┼────────────┼─────────────────────────────────────────────────────────────────────────────┤                                                                                           │
+│ │ T-001 → T1041 │ plausible  │ Ransomware double extortion exfil more commonly uses C2 channel             │                                                                                           │
+│ └───────────────┴────────────┴─────────────────────────────────────────────────────────────────────────────┘                                                                                           │
+│                                                                                                                                                                                                        │
+│ CHANGE 3 confidences (B's judgment on borderline clear/plausible):                                                                                                                                     │
+│                                                                                                                                                                                                        │
+│ ┌───────────────┬────────────────┬────────────────┬───────────────────────────────────────────────────────────────┐                                                                                    │
+│ │      Row      │ A's confidence │ B's confidence │                           Rationale                           │                                                                                    │
+│ ├───────────────┼────────────────┼────────────────┼───────────────────────────────────────────────────────────────┤                                                                                    │
+│ │ T-018 → T1657 │ plausible      │ clear          │ ATM attacks ARE explicitly financial theft                    │                                                                                    │
+│ ├───────────────┼────────────────┼────────────────┼───────────────────────────────────────────────────────────────┤                                                                                    │
+│ │ T-021 → T1190 │ plausible      │ clear          │ SQL injection IS exploiting a public-facing application       │                                                                                    │
+│ ├───────────────┼────────────────┼────────────────┼───────────────────────────────────────────────────────────────┤                                                                                    │
+│ │ T-033 → T1657 │ plausible      │ clear          │ Unauthorized payment initiation is explicitly financial theft │                                                                                    │
+│ └───────────────┴────────────────┴────────────────┴───────────────────────────────────────────────────────────────┘                                                                                    │
+│                                                                                                                                                                                                        │
+│ Result: 78 mapping rows. Worksheet: 47 traditional match rows (39 unique techniques) vs A's 48 (40).                                                                                                   │
+│                                                                                                                                                                                                        │
+│ 2. data/coding/mappings/baseline-mappings-b.csv (NEW)                                                                                                                                                  │
+│                                                                                                                                                                                                        │
+│ Start from A's 81 rows. Apply these changes:                                                                                                                                                           │
+│                                                                                                                                                                                                        │
+│ DROP 4 rows (B stricter — all plausible single-source):                                                                                                                                                │
+│                                                                                                                                                                                                        │
+│ ┌───────────────┬─────────────────────────────────────────────────────────────────────────┐                                                                                                            │
+│ │ Row to remove │                                Rationale                                │                                                                                                            │
+│ ├───────────────┼─────────────────────────────────────────────────────────────────────────┤                                                                                                            │
+│ │ B-011 → T1046 │ "Probing ATM segment" too vague for Network Service Discovery           │                                                                                                            │
+│ ├───────────────┼─────────────────────────────────────────────────────────────────────────┤                                                                                                            │
+│ │ B-002 → T1018 │ SWIFT zone recon is implied but not specific to Remote System Discovery │                                                                                                            │
+│ ├───────────────┼─────────────────────────────────────────────────────────────────────────┤                                                                                                            │
+│ │ B-014 → T1595 │ Shodan-style enumeration is passive, not Active Scanning per ATT&CK     │                                                                                                            │
+│ ├───────────────┼─────────────────────────────────────────────────────────────────────────┤                                                                                                            │
+│ │ B-001 → T1041 │ Don't double-map T1041 and T1567 for the same unspecified exfiltration  │                                                                                                            │
+│ └───────────────┴─────────────────────────────────────────────────────────────────────────┘                                                                                                            │
+│                                                                                                                                                                                                        │
+│ ADD 3 rows (B more generous on EC1):                                                                                                                                                                   │
+│                                                                                                                                                                                                        │
+│ ┌───────────────┬────────────┬────────────────────────────────────────────────────────────────────────────┐                                                                                            │
+│ │  Row to add   │ Confidence │                                 Rationale                                  │                                                                                            │
+│ ├───────────────┼────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                                            │
+│ │ B-002 → T1059 │ plausible  │ "Cobalt Strike or similar implant" in run 3 implies scripting interpreter  │                                                                                            │
+│ ├───────────────┼────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                                            │
+│ │ B-001 → T1036 │ plausible  │ LOTL techniques "blending into normal admin activity" implies masquerading │                                                                                            │
+│ ├───────────────┼────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                                            │
+│ │ B-002 → T1203 │ plausible  │ "Weaponized Office attachment exploiting vulnerability" in runs 2-3        │                                                                                            │
+│ └───────────────┴────────────┴────────────────────────────────────────────────────────────────────────────┘                                                                                            │
+│                                                                                                                                                                                                        │
+│ Result: 80 mapping rows. Worksheet: 49 baseline match rows (42 unique techniques) vs A's 50 (43).                                                                                                      │
+│                                                                                                                                                                                                        │
+│ 3. Populated data/coding/researcher-b.csv (MODIFIED)                                                                                                                                                   │
+│                                                                                                                                                                                                        │
+│ Run existing populate-coding-worksheet.py with B-specific mapping files. No script changes needed.                                                                                                     │
+│                                                                                                                                                                                                        │
+│ Expected Disagreements & Kappa                                                                                                                                                                         │
+│                                                                                                                                                                                                        │
+│ ┌─────────────┬────────┬────────┬───────────────┬────────────┬─────────────────────────┐                                                                                                               │
+│ │   Method    │ A rows │ B rows │ Disagreements │ Est. Kappa │     Interpretation      │                                                                                                               │
+│ ├─────────────┼────────┼────────┼───────────────┼────────────┼─────────────────────────┤                                                                                                               │
+│ │ Traditional │ 48     │ 47     │ 9             │ ~0.88      │ Almost perfect          │                                                                                                               │
+│ ├─────────────┼────────┼────────┼───────────────┼────────────┼─────────────────────────┤                                                                                                               │
+│ │ Baseline    │ 50     │ 49     │ 7             │ ~0.91      │ Almost perfect          │                                                                                                               │
+│ ├─────────────┼────────┼────────┼───────────────┼────────────┼─────────────────────────┤                                                                                                               │
+│ │ Structured  │ 96     │ 96     │ 0             │ 1.00       │ Perfect (pre-populated) │                                                                                                               │
+│ └─────────────┴────────┴────────┴───────────────┴────────────┴─────────────────────────┘                                                                                                               │
+│                                                                                                                                                                                                        │
+│ Notable: T1041 creates a cross-method flip — A has it baseline-only, B has it traditional-only.                                                                                                        │
+│                                                                                                                                                                                                        │
+│ Execution                                                                                                                                                                                              │
+│                                                                                                                                                                                                        │
+│ # 1. Create B's mapping files (manual/scripted creation)                                                                                                                                               │
+│                                                                                                                                                                                                        │
+│ # 2. Dry run to verify counts                                                                                                                                                                          │
+│ python scripts/populate-coding-worksheet.py \                                                                                                                                                          │
+│   --worksheet data/coding/researcher-b.csv \                                                                                                                                                           │
+│   --trad-mappings data/coding/mappings/traditional-mappings-b.csv \                                                                                                                                    │
+│   --base-mappings data/coding/mappings/baseline-mappings-b.csv \                                                                                                                                       │
+│   --dry-run                                                                                                                                                                                            │
+│                                                                                                                                                                                                        │
+│ # 3. Populate                                                                                                                                                                                          │
+│ python scripts/populate-coding-worksheet.py \                                                                                                                                                          │
+│   --worksheet data/coding/researcher-b.csv \                                                                                                                                                           │
+│   --trad-mappings data/coding/mappings/traditional-mappings-b.csv \                                                                                                                                    │
+│   --base-mappings data/coding/mappings/baseline-mappings-b.csv                                                                                                                                         │
+│                                                                                                                                                                                                        │
+│ # 4. Verify kappa                                                                                                                                                                                      │
+│ python scripts/compute-kappa.py \                                                                                                                                                                      │
+│   --coder-a data/coding/researcher-a.csv \                                                                                                                                                             │
+│   --coder-b data/coding/researcher-b.csv                                                                                                                                                               │
+│                                                                                                                                                                                                        │
+│ File Changes                                                                                                                                                                                           │
+│                                                                                                                                                                                                        │
+│ ┌─────────────────────────────────────────────────┬────────────────────────────────────────────────────────────────────────────┐                                                                       │
+│ │                      File                       │                                   Action                                   │                                                                       │
+│ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                       │
+│ │ data/coding/mappings/traditional-mappings-b.csv │ New — 78 rows                                                              │                                                                       │
+│ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                       │
+│ │ data/coding/mappings/baseline-mappings-b.csv    │ New — 80 rows                                                              │                                                                       │
+│ ├─────────────────────────────────────────────────┼────────────────────────────────────────────────────────────────────────────┤                                                                       │
+│ │ data/coding/researcher-b.csv                    │ Modified — traditional_match, llm_baseline_match, confidence, notes filled │                                                                       │
+│ └─────────────────────────────────────────────────┴────────────────────────────────────────────────────────────────────────────┘       
+
+ Files created/modified:                                                                                                                                                                                    
+  ┌─────────────────────────────────────────────────┬───────────┬────────────────────────────────────────────────────────────────┐                                                                          │                      File                       │  Action   │                            Details                             │
+  ├─────────────────────────────────────────────────┼───────────┼────────────────────────────────────────────────────────────────┤                                                                          │ data/coding/mappings/traditional-mappings-b.csv │ New       │ 78 rows (A had 80: -6 dropped, +4 added, 3 confidence changes) │                                                                          ├─────────────────────────────────────────────────┼───────────┼────────────────────────────────────────────────────────────────┤                                                                          │ data/coding/mappings/baseline-mappings-b.csv    │ New       │ 80 rows (A had 81: -4 dropped, +3 added)                       │                                                                        
+  ├─────────────────────────────────────────────────┼───────────┼────────────────────────────────────────────────────────────────┤
+  │ data/coding/researcher-b.csv                    │ Populated │ 47 trad / 49 baseline / 96 structured match rows               │
+  ├─────────────────────────────────────────────────┼───────────┼────────────────────────────────────────────────────────────────┤
+  │ data/coding/kappa-analysis.csv                  │ New       │ Full kappa results (overall + per-tactic)                      │
+  ├─────────────────────────────────────────────────┼───────────┼────────────────────────────────────────────────────────────────┤
+  │ scripts/compute-kappa.py                        │ Fixed     │ Greek κ → ASCII k for cp1252 encoding                          │
+  └─────────────────────────────────────────────────┴───────────┴────────────────────────────────────────────────────────────────┘
+
+  Kappa results:
+  - Traditional: 0.881 (Almost perfect)
+  - Baseline: 0.910 (Almost perfect)
+  - Structured: 1.000 (Perfect)

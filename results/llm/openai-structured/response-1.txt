@@ -1,0 +1,152 @@
+Based on the organizational profile of NordFinans Bank AB and leveraging the MITRE ATT&CK Enterprise framework as an analytical lens, a comprehensive threat identification exercise is presented below. Each tactic is explored with relevant techniques, their explanations, and associated ATT&CK technique IDs.
+
+---
+
+# 1. Reconnaissance  
+### Relevant Techniques:  
+- **T1595.002 - Active Scanning: Vulnerability Scanning**  
+  NordFinans' public-facing assets (e.g., web banking portal, mobile app APIs) are likely to be scanned by adversaries for exploitable vulnerabilities. Given the bank's annual penetration testing and the reliance on Qualys for quarterly scans, unpatched vulnerabilities or misconfigurations could be discovered by attackers.
+
+- **T1596.001 - Search Open Technical Databases**  
+  Adversaries may search for exposed credentials or sensitive information related to NordFinans in public repositories like GitHub or paste sites. The use of Azure DevOps for development increases the risk of accidental code leakage.
+
+- **T1598.001 - Spear Phishing Service**  
+  Attackers may gather personal details about executives or employees from LinkedIn or other public profiles to craft spear-phishing campaigns, given the high-value targets in the banking industry.
+
+---
+
+# 2. Resource Development  
+### Relevant Techniques:  
+- **T1587.001 - Develop Capabilities: Malware**  
+  Threat actors may develop or acquire malware specifically targeting core banking systems, SWIFT infrastructure, or web-facing APIs, given their criticality to the bank's operations.
+
+- **T1584.002 - Compromise Infrastructure: Server**  
+  Adversaries frequently use compromised infrastructure (e.g., cloud VMs or on-prem servers) to stage attacks. The reliance on Azure workloads adds potential attack vectors.
+
+---
+
+# 3. Initial Access  
+### Relevant Techniques:  
+- **T1190 - Exploit Public-Facing Application**  
+  The bank's web banking portal and PSD2-compliant Open Banking APIs are potential targets for exploitation, particularly if vulnerabilities exist in Azure App Service or the application code itself.
+
+- **T1078 - Valid Accounts**  
+  Compromised employee or customer credentials (obtained via phishing, credential stuffing, or prior breaches) could be used. The lack of MFA enforcement for all internal applications increases this risk.
+
+- **T1566.002 - Spear Phishing Link**  
+  Spear phishing could be used to target employees, especially those with privileged access to critical systems like SWIFT or Active Directory.
+
+---
+
+# 4. Execution  
+### Relevant Techniques:  
+- **T1059.003 - Command and Scripting Interpreter: Windows Command Shell**  
+  Adversaries may use PowerShell or Windows Command Shell to execute scripts on compromised endpoints. With ~2,200 Windows 11 endpoints in use, this is a relevant threat.
+
+- **T1203 - Exploitation for Client Execution**  
+  Exploiting vulnerabilities in employee endpoints or third-party applications (e.g., Microsoft 365, Azure DevOps) could allow attackers to execute malicious code.
+
+---
+
+# 5. Persistence  
+### Relevant Techniques:  
+- **T1136.001 - Create Account: Local Account**  
+  On compromised systems, attackers may create local accounts to maintain persistence. This is particularly concerning for on-premises servers and endpoints.
+
+- **T1543.003 - Create or Modify System Process: Windows Service**  
+  Modifying legitimate services or creating malicious services on Windows servers or workstations could allow persistent control.
+
+---
+
+# 6. Privilege Escalation  
+### Relevant Techniques:  
+- **T1055.001 - Process Injection: DLL Injection**  
+  Attackers may use DLL injection into legitimate processes on Windows systems to escalate privileges.
+
+- **T1548.002 - Abuse Elevation Control Mechanism: Bypass User Account Control**  
+  Windows' User Account Control (UAC) on endpoints and servers may be bypassed to elevate privileges locally.
+
+---
+
+# 7. Defense Evasion  
+### Relevant Techniques:  
+- **T1562.001 - Impair Defenses: Disable or Modify Tools**  
+  Disabling CrowdStrike Falcon EDR or modifying its configuration would allow attackers to evade detection.
+
+- **T1027 - Obfuscated Files or Information**  
+  Adversaries may use obfuscation techniques to evade detection in NordFinans' hybrid cloud environment, especially targeting Azure workloads.
+
+---
+
+# 8. Credential Access  
+### Relevant Techniques:  
+- **T1555.003 - Credentials from Web Browsers**  
+  Employees' saved credentials in browsers could be extracted if endpoints are compromised.
+
+- **T1003.001 - OS Credential Dumping: LSASS Memory**  
+  Dumping credentials from LSASS on compromised servers or endpoints could provide attackers with domain admin credentials, which is critical given NordFinans' hybrid Active Directory setup.
+
+---
+
+# 9. Discovery  
+### Relevant Techniques:  
+- **T1083 - File and Directory Discovery**  
+  Adversaries may explore shared file systems or directories, including sensitive files related to banking operations or customer data.
+
+- **T1016 - System Network Configuration Discovery**  
+  Attackers may map NordFinans' segmented network zones (core banking, SWIFT, etc.) to identify high-value targets.
+
+---
+
+# 10. Lateral Movement  
+### Relevant Techniques:  
+- **T1021.002 - Remote Services: SMB/Windows Admin Shares**  
+  Adversaries may use compromised credentials to move laterally via SMB or admin shares within the Windows environment.
+
+- **T1563.002 - Remote Service Session Hijacking: RDP Hijacking**  
+  Attackers could hijack legitimate RDP sessions to access critical systems, especially given the hybrid cloud model.
+
+---
+
+# 11. Collection  
+### Relevant Techniques:  
+- **T1114.001 - Email Collection: Local Email Stores**  
+  Adversaries targeting Exchange Online may attempt to collect sensitive communications.
+
+- **T1056.001 - Input Capture: Keylogging**  
+  Keylogging on compromised endpoints could be used to capture credentials or sensitive banking data.
+
+---
+
+# 12. Command and Control (C2)  
+### Relevant Techniques:  
+- **T1071.001 - Application Layer Protocol: Web Protocols**  
+  Adversaries may use HTTPS to communicate with C2 infrastructure, blending in with legitimate traffic through NordFinans' Azure workloads.
+
+- **T1573 - Encrypted Channel**  
+  Encrypted C2 channels make detection more challenging, particularly in hybrid cloud environments.
+
+---
+
+# 13. Exfiltration  
+### Relevant Techniques:  
+- **T1041 - Exfiltration Over C2 Channel**  
+  Sensitive customer data or financial records may be exfiltrated via encrypted C2 channels.
+
+- **T1567.002 - Exfiltration Over Web Service: Cloud Storage**  
+  Adversaries may leverage cloud storage (e.g., Azure Blob Storage) to exfiltrate stolen data.
+
+---
+
+# 14. Impact  
+### Relevant Techniques:  
+- **T1486 - Data Encrypted for Impact**  
+  Ransomware targeting core banking systems, SWIFT infrastructure, or backups could disrupt operations significantly. The last IR tabletop exercise focused on ransomware, highlighting this as a priority concern.
+
+- **T1499 - Endpoint Denial of Service**  
+  A DDoS attack against the web banking portal or mobile app could impact customer trust and availability.
+
+---
+
+### Conclusion:  
+The threats identified above align with the ATT&CK Enterprise framework, considering NordFinans Bank AB's infrastructure, regulatory obligations, and security posture. Prioritizing mitigations for credential access, lateral movement, and impact tactics, alongside strengthening SOC capabilities, will be critical to enhancing operational resilience.

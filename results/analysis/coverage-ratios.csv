@@ -1,0 +1,76 @@
+tactic,method,techniques_identified,techniques_total,coverage_pct
+OVERALL,Traditional,52,235,22.1
+OVERALL,LLM Base (Claude),53,235,22.6
+OVERALL,LLM Struct (Claude),96,235,40.9
+OVERALL,LLM Struct (Gemini),49,235,20.9
+OVERALL,LLM Struct (GPT-4o),36,235,15.3
+reconnaissance,Traditional,1,10,10.0
+reconnaissance,LLM Base (Claude),2,10,20.0
+reconnaissance,LLM Struct (Claude),8,10,80.0
+reconnaissance,LLM Struct (Gemini),5,10,50.0
+reconnaissance,LLM Struct (GPT-4o),2,10,20.0
+resource-development,Traditional,0,8,0.0
+resource-development,LLM Base (Claude),0,8,0.0
+resource-development,LLM Struct (Claude),4,8,50.0
+resource-development,LLM Struct (Gemini),2,8,25.0
+resource-development,LLM Struct (GPT-4o),2,8,25.0
+initial-access,Traditional,6,10,60.0
+initial-access,LLM Base (Claude),6,10,60.0
+initial-access,LLM Struct (Claude),6,10,60.0
+initial-access,LLM Struct (Gemini),4,10,40.0
+initial-access,LLM Struct (GPT-4o),4,10,40.0
+execution,Traditional,3,14,21.4
+execution,LLM Base (Claude),4,14,28.6
+execution,LLM Struct (Claude),5,14,35.7
+execution,LLM Struct (Gemini),3,14,21.4
+execution,LLM Struct (GPT-4o),2,14,14.3
+persistence,Traditional,3,20,15.0
+persistence,LLM Base (Claude),4,20,20.0
+persistence,LLM Struct (Claude),8,20,40.0
+persistence,LLM Struct (Gemini),5,20,25.0
+persistence,LLM Struct (GPT-4o),4,20,20.0
+privilege-escalation,Traditional,3,14,21.4
+privilege-escalation,LLM Base (Claude),2,14,14.3
+privilege-escalation,LLM Struct (Claude),9,14,64.3
+privilege-escalation,LLM Struct (Gemini),5,14,35.7
+privilege-escalation,LLM Struct (GPT-4o),3,14,21.4
+defense-evasion,Traditional,8,43,18.6
+defense-evasion,LLM Base (Claude),7,43,16.3
+defense-evasion,LLM Struct (Claude),11,43,25.6
+defense-evasion,LLM Struct (Gemini),6,43,14.0
+defense-evasion,LLM Struct (GPT-4o),3,43,7.0
+credential-access,Traditional,9,17,52.9
+credential-access,LLM Base (Claude),9,17,52.9
+credential-access,LLM Struct (Claude),9,17,52.9
+credential-access,LLM Struct (Gemini),4,17,23.5
+credential-access,LLM Struct (GPT-4o),3,17,17.6
+discovery,Traditional,1,32,3.1
+discovery,LLM Base (Claude),5,32,15.6
+discovery,LLM Struct (Claude),5,32,15.6
+discovery,LLM Struct (Gemini),2,32,6.2
+discovery,LLM Struct (GPT-4o),2,32,6.2
+lateral-movement,Traditional,2,9,22.2
+lateral-movement,LLM Base (Claude),3,9,33.3
+lateral-movement,LLM Struct (Claude),6,9,66.7
+lateral-movement,LLM Struct (Gemini),3,9,33.3
+lateral-movement,LLM Struct (GPT-4o),2,9,22.2
+collection,Traditional,7,17,41.2
+collection,LLM Base (Claude),5,17,29.4
+collection,LLM Struct (Claude),6,17,35.3
+collection,LLM Struct (Gemini),3,17,17.6
+collection,LLM Struct (GPT-4o),3,17,17.6
+command-and-control,Traditional,2,18,11.1
+command-and-control,LLM Base (Claude),0,18,0.0
+command-and-control,LLM Struct (Claude),5,18,27.8
+command-and-control,LLM Struct (Gemini),2,18,11.1
+command-and-control,LLM Struct (GPT-4o),2,18,11.1
+exfiltration,Traditional,2,9,22.2
+exfiltration,LLM Base (Claude),2,9,22.2
+exfiltration,LLM Struct (Claude),6,9,66.7
+exfiltration,LLM Struct (Gemini),3,9,33.3
+exfiltration,LLM Struct (GPT-4o),2,9,22.2
+impact,Traditional,5,14,35.7
+impact,LLM Base (Claude),4,14,28.6
+impact,LLM Struct (Claude),8,14,57.1
+impact,LLM Struct (Gemini),2,14,14.3
+impact,LLM Struct (GPT-4o),2,14,14.3

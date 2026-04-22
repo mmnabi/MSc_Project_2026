@@ -1,0 +1,117 @@
+threat_id,technique_id,threat_description,run_1,run_2,run_3,included
+S-001,T1591,Gather Victim Org Information,1,1,1,1
+S-002,T1590,Gather Victim Network Information,1,0,1,1
+S-003,T1595,Active Scanning,1,0,1,1
+S-004,T1593,Search Open Websites/Domains,1,1,1,1
+S-005,T1596,Search Open Technical Databases,1,1,0,1
+S-006,T1597,Search Closed Sources,1,0,1,1
+S-007,T1598,Phishing for Information,1,1,0,1
+S-008,T1583,Acquire Infrastructure,1,1,1,1
+S-009,T1585,Establish Accounts,1,1,1,1
+S-010,T1586,Compromise Accounts,1,0,0,0
+S-011,T1587,Develop Capabilities,1,1,1,1
+S-012,T1588,Obtain Capabilities,1,1,1,1
+S-013,T1566,Phishing,1,1,1,1
+S-014,T1190,Exploit Public-Facing Application,1,1,1,1
+S-015,T1133,External Remote Services,1,1,1,1
+S-016,T1195,Supply Chain Compromise,1,1,1,1
+S-017,T1199,Trusted Relationship,1,1,1,1
+S-018,T1078,Valid Accounts,1,1,1,1
+S-019,T1189,Drive-by Compromise,1,0,0,0
+S-020,T1059,Command and Scripting Interpreter,1,1,1,1
+S-021,T1204,User Execution,1,1,1,1
+S-022,T1072,Software Deployment Tools,1,1,1,1
+S-023,T1053,Scheduled Task/Job,1,1,1,1
+S-024,T1047,Windows Management Instrumentation,1,1,1,1
+S-025,T1106,Native API,1,0,0,0
+S-026,T1098,Account Manipulation,1,1,1,1
+S-027,T1505,Server Software Component,1,1,1,1
+S-028,T1556,Modify Authentication Process,1,0,1,1
+S-029,T1136,Create Account,1,0,1,1
+S-030,T1543,Create or Modify System Process,1,1,0,1
+S-031,T1068,Exploitation for Privilege Escalation,1,1,1,1
+S-032,T1558,Steal or Forge Kerberos Tickets,1,1,1,1
+S-033,T1134,Access Token Manipulation,1,1,1,1
+S-034,T1484,Domain Policy Modification,1,1,1,1
+S-035,T1611,Escape to Host,1,0,1,1
+S-036,T1548,Abuse Elevation Control Mechanism,1,0,1,1
+S-037,T1562,Impair Defenses,1,1,1,1
+S-038,T1550,Use Alternate Authentication Material,1,1,1,1
+S-039,T1027,Obfuscated Files or Information,1,1,1,1
+S-040,T1218,System Binary Proxy Execution,1,0,1,1
+S-041,T1070,Indicator Removal,1,0,1,1
+S-042,T1090,Proxy,1,1,1,1
+S-043,T1620,Reflective Code Loading,1,0,0,0
+S-044,T1606,Forge Web Credentials,1,0,0,0
+S-045,T1110,Brute Force,1,1,1,1
+S-046,T1003,OS Credential Dumping,1,1,1,1
+S-047,T1111,Multi-Factor Authentication Interception,1,0,1,1
+S-048,T1621,Multi-Factor Authentication Request Generation,1,0,0,0
+S-049,T1539,Steal Web Session Cookie,1,1,1,1
+S-050,T1528,Steal Application Access Token,1,1,0,1
+S-051,T1649,Steal or Forge Authentication Certificates,1,0,0,0
+S-052,T1557,Adversary-in-the-Middle,1,0,1,1
+S-053,T1087,Account Discovery,1,1,1,1
+S-054,T1069,Permission Groups Discovery,1,1,1,1
+S-055,T1046,Network Service Discovery,1,1,1,1
+S-056,T1580,Cloud Infrastructure Discovery,1,1,1,1
+S-057,T1518,Software Discovery,1,0,0,0
+S-058,T1040,Network Sniffing,1,0,0,0
+S-059,T1082,System Information Discovery,1,1,0,1
+S-060,T1021,Remote Services,1,1,1,1
+S-061,T1534,Internal Spearphishing,1,1,1,1
+S-062,T1570,Lateral Tool Transfer,1,1,1,1
+S-063,T1210,Exploitation of Remote Services,1,0,1,1
+S-064,T1213,Data from Information Repositories,1,1,1,1
+S-065,T1114,Email Collection,1,1,1,1
+S-066,T1530,Data from Cloud Storage Object,1,1,1,1
+S-067,T1005,Data from Local System,1,1,1,1
+S-068,T1056,Input Capture,1,0,0,0
+S-069,T1560,Archive Collected Data,1,0,1,1
+S-070,T1602,Data from Configuration Repository,1,0,0,0
+S-071,T1071,Application Layer Protocol,1,1,1,1
+S-072,T1102,Web Service,1,0,1,1
+S-073,T1573,Encrypted Channel,1,0,0,0
+S-074,T1219,Remote Access Software,1,0,0,0
+S-075,T1572,Protocol Tunneling,1,1,1,1
+S-076,T1041,Exfiltration Over C2 Channel,1,1,0,1
+S-077,T1567,Exfiltration Over Web Service,1,1,1,1
+S-078,T1537,Transfer Data to Cloud Account,1,0,1,1
+S-079,T1029,Scheduled Transfer,1,1,0,1
+S-080,T1048,Exfiltration Over Alternative Protocol,1,1,1,1
+S-081,T1020,Automated Exfiltration,1,0,0,0
+S-082,T1657,Financial Theft,1,1,1,1
+S-083,T1486,Data Encrypted for Impact (Ransomware),1,1,1,1
+S-084,T1565,Data Manipulation,1,0,1,1
+S-085,T1491,Defacement,1,1,1,1
+S-086,T1485,Data Destruction,1,1,0,1
+S-087,T1561,Disk Wipe,1,1,0,1
+S-088,T1498,Network Denial of Service,1,0,1,1
+S-089,T1531,Account Access Removal,1,0,0,0
+S-090,T1496,Resource Hijacking,1,0,0,0
+S-091,T1592,Gather Victim Host Information,0,1,1,1
+S-092,T1546,Event Triggered Execution,0,1,0,0
+S-093,T1036,Masquerading,0,1,1,1
+S-094,T1055,Process Injection,0,1,0,0
+S-095,T1553,Subvert Trust Controls,0,1,0,0
+S-096,T1564,Hide Artifacts,0,1,0,0
+S-097,T1552,Unsecured Credentials,0,1,1,1
+S-098,T1135,Network Share Discovery,0,1,0,0
+S-099,T1563,Remote Service Session Hijacking,0,1,0,0
+S-100,T1074,Data Staged,0,1,0,0
+S-101,T1185,Browser Session Hijacking,0,1,0,0
+S-102,T1568,Dynamic Resolution,0,1,1,1
+S-103,T1008,Fallback Channels,0,1,0,0
+S-104,T1030,Data Transfer Size Limits,0,1,1,1
+S-105,T1490,Inhibit System Recovery,0,1,1,1
+S-106,T1489,Service Stop,0,1,0,0
+S-107,T1659,Content Injection,0,1,0,0
+S-108,T1589,Gather Victim Identity Information,0,0,1,0
+S-109,T1584,Compromise Infrastructure,0,0,1,0
+S-110,T1203,Exploitation for Client Execution,0,0,1,0
+S-111,T1574,Hijack Execution Flow,0,0,1,0
+S-112,T1176,Browser Extensions,0,0,1,0
+S-113,T1057,Process Discovery,0,0,1,0
+S-114,T1526,Cloud Service Discovery,0,0,1,0
+S-115,T1499,Endpoint Denial of Service,0,0,1,0
+S-116,T1529,System Shutdown/Reboot,0,0,1,0

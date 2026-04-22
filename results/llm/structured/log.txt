@@ -1,0 +1,37 @@
+
+   Thesiswork  ➜ ( main)  python scripts/package-manual-runs.py --variant structured --input-dir data/llm/structured
+Variant:       structured
+Prompt file:   data\llm\prompt-structured.txt (9002 chars)
+Prompt hash:   85c1b886a0c3f641...
+Response files: 3 found
+
+  response-1.txt: 59642 chars
+    Packaged -> data\llm\structured\run-1.json
+  response-2.txt: 51297 chars
+    Packaged -> data\llm\structured\run-2.json
+  response-3.txt: 45512 chars
+    Packaged -> data\llm\structured\run-3.json
+
+Done. 3 runs packaged in: data/llm/structured
+Next step: python scripts/consolidate-runs.py --input-dir data/llm/structured
+   Thesiswork  ➜ ( main)  python scripts/consolidate-runs.py --input-dir data/llm/structured
+Loading runs from: data/llm/structured
+  Loaded: run-1.json (59642 chars)
+  Loaded: run-2.json (51297 chars)
+  Loaded: run-3.json (45512 chars)
+  Loaded 3 runs.
+
+  Run 1: Extracted 91 threat entries.
+  Run 2: Extracted 14 threat entries.
+  Run 3: Extracted 82 threat entries.
+
+  NOTE: Automated extraction provides a starting point.
+  Researcher review is required for semantic matching across runs.
+  The 'run_N' columns should be verified manually.
+
+Consolidation summary (structured variant):
+  Total unique threats extracted: 187
+  Included (≥2/3 runs):          0
+  Excluded (1/3 runs only):       187
+
+Consolidated output written to: data\llm\structured\consolidated.csv

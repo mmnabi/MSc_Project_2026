@@ -1,0 +1,79 @@
+threat_id,technique_id,confidence,rationale
+T-001,T1486,clear,Explicitly describes ransomware encryption of core banking systems
+T-001,T1078,plausible,Hybrid AD compromise strongly implies credential-based access
+T-001,T1490,plausible,Standard ransomware behavior; partial air-gap backups noted as concern
+T-001,T1041,plausible,Ransomware double extortion exfil more commonly uses C2 channel than web service
+T-002,T1486,clear,Ransomware encryption of virtualization infrastructure (ESXi and Azure VMs) explicitly described
+T-002,T1490,plausible,Ransomware targeting VMs implies recovery disruption
+T-003,T1190,clear,Exploitation of PAN-OS and Cisco AnyConnect perimeter vulnerabilities explicitly described with CVEs
+T-003,T1133,plausible,Cisco AnyConnect VPN is an external remote service used as attack vector
+T-004,T1566,clear,Spear-phishing with credential harvesting pages explicitly described
+T-004,T1598,clear,Credential harvesting pages mimicking M365 login and Azure portal explicitly described
+T-004,T1078,plausible,Harvested VPN and M365 credentials used for subsequent access
+T-005,T1566,clear,BEC is a phishing-based social engineering attack
+T-005,T1657,clear,Fraudulent payment instructions targeting treasury/CFO for financial theft
+T-006,T1557,clear,Adversary-in-the-Middle (AiTM) phishing explicitly named with Evilginx2 reference
+T-006,T1539,clear,Post-authentication session token theft explicitly described
+T-006,T1111,clear,MFA bypass via AiTM proxy intercepting authentication explicitly described
+T-006,T1550,plausible,Stolen session tokens reused for M365/Azure access
+T-009,T1110,clear,Credential stuffing with automated tooling and breach datasets explicitly described
+T-009,T1078,plausible,Successful credential reuse grants valid account access to banking portals
+T-010,T1110,clear,Brute force and password spraying against hybrid AD and VPN endpoints explicitly described
+T-010,T1078,plausible,Leaked credentials from third-party breaches used for access
+T-011,T1555,clear,Browser credential harvesting by info stealers (Redline/Vidar) explicitly described
+T-011,T1539,clear,Session token harvesting from endpoints explicitly described
+T-011,T1552,plausible,VPN passwords harvested from employee endpoints
+T-012,T1204,clear,Novel file types (OneNote/ISO/LNK) require user execution to deliver payload
+T-013,T1204,clear,Fake mobile banking apps require user installation
+T-013,T1056,clear,Overlay attacks on Android capture user input explicitly described
+T-015,T1195,clear,Compromise of CI/CD pipelines and package repositories explicitly described
+T-016,T1199,clear,MSSP compromise used as pivot via trusted VPN and API integration
+T-016,T1078,plausible,MSSP VPN and API integration credentials used for access
+T-017,T1199,clear,Vendor support VPN as trusted access channel to core banking
+T-017,T1133,clear,Temenos VPN connection to T24 environment explicitly described
+T-018,T1199,clear,Dedicated VPN with Euronet ATM processor as trusted access channel
+T-018,T1133,plausible,Dedicated VPN tunnel connection to core banking network
+T-018,T1657,clear,ATM man-in-the-middle and relay attacks for financial fraud
+T-019,T1195,clear,Dependency confusion and typosquatting targeting Azure DevOps build pipelines
+T-020,T1530,clear,Azure Blob storage exfiltration via misconfigured access controls explicitly described
+T-020,T1213,clear,M365 SharePoint data exfiltration explicitly described
+T-021,T1190,clear,SQL injection against Oracle DB cited as attack vector with Oracle CVEs
+T-021,T1005,clear,Data exfiltration from core banking Oracle DB explicitly described
+T-022,T1078,clear,Privileged employee using legitimate credentials for data access
+T-022,T1005,clear,Insider accessing customer financial records and SWIFT transaction data
+T-023,T1498,clear,Volumetric DDoS against Azure Front Door web/mobile banking endpoints
+T-024,T1499,clear,Application-layer L7 DDoS targeting API gateway and authentication endpoints
+T-026,T1498,clear,DDoS attack component as distraction/smokescreen explicitly described
+T-026,T1499,plausible,DDoS type unspecified; application-layer targeting also plausible
+T-026,T1562,plausible,DDoS consuming SOC attention effectively degrades detection capability
+T-027,T1068,clear,Windows privilege escalation via CLFS driver and kernel vulnerabilities with CVEs
+T-028,T1190,clear,SharePoint and Exchange RCE exploitation with CVEs explicitly described
+T-029,T1190,clear,Log4j and Java deserialization RCE in T24 legacy Java components
+T-030,T1190,clear,SAP NetWeaver file upload and missing auth vulnerabilities with CVEs
+T-031,T1078,clear,Compromised SWIFT operator credentials explicitly described
+T-031,T1021,plausible,Lateral movement into SWIFT secure zone implies remote service use
+T-031,T1657,clear,Fraudulent MT103/MT202 SWIFT messages for interbank fund theft
+T-033,T1528,clear,OAuth 2.0 credential theft or abuse for unauthorized API access
+T-033,T1078,plausible,Valid OAuth tokens used as authorized API credentials
+T-033,T1657,clear,Unauthorized PSD2 payment initiation via compromised TPP
+T-034,T1056,clear,Digital skimming intercepts customer card data and transaction details via overlay/injection
+T-035,T1657,clear,ATM jackpotting and cash-out fraud explicitly described
+T-035,T1199,plausible,Network-level ATM manipulation through Euronet trusted VPN
+T-036,T1213,plausible,Targeting M&A data and correspondent banking relationships in repositories
+T-037,T1059,clear,PowerShell explicitly named as LOTL technique for EDR evasion
+T-037,T1047,clear,WMI explicitly named as lateral movement technique
+T-037,T1021,clear,PSExec explicitly named for lateral movement into systems
+T-037,T1218,plausible,Signed binary abuse for CrowdStrike EDR evasion mentioned
+T-037,T1036,plausible,Blend into normal administrative activity explicitly implies masquerading
+T-037,T1070,plausible,APT LOTL lateral movement strongly implies covering tracks
+T-038,T1102,clear,Using Azure and M365 cloud services for C2 communications explicitly described
+T-039,T1530,clear,Exposed storage accounts and management APIs explicitly described
+T-039,T1078,plausible,Overly permissive Managed Identity roles imply credential abuse
+T-039,T1580,plausible,Discovery of misconfigured Azure management APIs and storage
+T-040,T1078,clear,Azure AD Connect synchronization account abuse for cross-environment pivot
+T-042,T1098,clear,OAuth consent grants modify account access permissions persistently
+T-042,T1528,clear,OAuth token-based persistent access to mailboxes and SharePoint
+T-042,T1114,plausible,Persistent mailbox access via consent grants
+T-042,T1213,plausible,Persistent SharePoint access via consent grants
+T-043,T1558,clear,Kerberoasting and AS-REP roasting against hybrid AD service accounts explicitly named
+T-043,T1078,plausible,Cracked service account credentials used for privilege escalation

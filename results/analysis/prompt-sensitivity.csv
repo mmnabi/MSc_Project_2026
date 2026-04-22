@@ -1,0 +1,15 @@
+tactic,baseline_count,structured_count,gained,lost,net_change,tactic_total
+reconnaissance,2,8,6,0,6,10
+resource-development,0,4,4,0,4,8
+initial-access,6,6,0,0,0,10
+execution,4,5,2,1,1,14
+persistence,4,8,4,0,4,20
+privilege-escalation,2,9,7,0,7,14
+defense-evasion,7,11,5,1,4,43
+credential-access,9,9,1,1,0,17
+discovery,5,5,1,1,0,32
+lateral-movement,3,6,3,0,3,9
+collection,5,6,1,0,1,17
+command-and-control,0,5,5,0,5,18
+exfiltration,2,6,4,0,4,9
+impact,4,8,4,0,4,14

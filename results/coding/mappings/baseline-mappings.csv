@@ -1,0 +1,82 @@
+threat_id,technique_id,confidence,rationale
+B-001,T1566,clear,Spear-phishing targeting hybrid workers explicitly described in all runs
+B-001,T1003,clear,LSASS dumping explicitly named as credential harvesting method
+B-001,T1558,clear,Kerberoasting and AS-REP roasting explicitly named for privilege escalation
+B-001,T1021,clear,PSExec and RDP explicitly named for lateral movement
+B-001,T1047,clear,WMI explicitly named as lateral movement technique
+B-001,T1078,clear,Domain Admin credentials and VPN credential abuse described
+B-001,T1486,clear,Ransomware encryption of file servers and T24 systems explicitly described
+B-001,T1490,clear,Backup infrastructure explicitly targeted for encryption
+B-001,T1218,plausible,Signed binary abuse mentioned for EDR evasion (living-off-the-land)
+B-001,T1562,plausible,Disabling CrowdStrike agent updates described in run 2
+B-001,T1087,plausible,BloodHound/SharpHound AD account enumeration described in run 2
+B-001,T1069,plausible,Privileged group membership mapping via BloodHound in run 2
+B-001,T1133,plausible,VPN credential capture and exploitation described
+B-001,T1110,plausible,Credential stuffing against VPN portal described in run 3
+B-001,T1190,plausible,Cisco AnyConnect vulnerability exploitation described in run 2
+B-001,T1598,plausible,Credential-harvesting page described in run 2
+B-001,T1041,plausible,Double extortion implies data exfiltration over C2 channel
+B-001,T1567,plausible,Double extortion data exfiltration via web service
+B-002,T1566,clear,Spearphishing targeting SWIFT operators and treasury staff across runs
+B-002,T1078,clear,SWIFT operator credential compromise and session use explicitly described
+B-002,T1657,clear,Fraudulent MT103/MT202COV SWIFT payment messages explicitly described
+B-002,T1003,clear,LSASS credential dumping and browser credential extraction in runs 2-3
+B-002,T1070,clear,Deleting or corrupting SWIFT transaction logs to delay detection in run 2
+B-002,T1558,plausible,Kerberoasting for lateral movement described in run 2
+B-002,T1021,plausible,Lateral movement toward SWIFT secure zone via management network
+B-002,T1550,plausible,Pass-the-hash technique for lateral movement described in run 2
+B-002,T1204,plausible,Malicious Office attachment execution described in runs 2-3
+B-002,T1005,plausible,SWIFT transaction log access and data collection
+B-002,T1133,plausible,Compromised VPN credentials as initial access in run 1
+B-002,T1218,plausible,Living-off-the-land C2 technique for EDR evasion in run 2
+B-002,T1598,plausible,Credential-harvesting link described in run 3
+B-002,T1555,plausible,Browser-stored credentials harvested in run 3
+B-002,T1018,plausible,Reconnaissance to identify SWIFT secure zone boundary and workstations
+B-003,T1528,clear,OAuth client credential theft and token abuse explicitly described across runs
+B-003,T1078,plausible,Valid authorized API access abused via compromised TPP credentials
+B-003,T1657,plausible,Fraudulent PISP payment initiation via compromised Open Banking APIs
+B-004,T1195,clear,CI/CD pipeline compromise and dependency confusion explicitly described across runs
+B-004,T1078,clear,Developer Azure AD account compromise explicitly described
+B-004,T1505,plausible,Web shell and backdoor injection into deployed applications described
+B-004,T1557,plausible,AiTM phishing for developer OAuth token described in run 2
+B-004,T1566,plausible,Phishing targeting developers described in run 3
+B-004,T1199,plausible,Pipeline deploys as trusted channel into production
+B-005,T1110,clear,Credential stuffing with automated tooling (OpenBullet/Sentry MBA/STORM) explicitly described
+B-005,T1078,plausible,Successful credential reuse grants valid web banking account access
+B-005,T1657,plausible,Fraudulent transactions initiated from compromised customer accounts
+B-007,T1078,clear,Privileged insider using legitimate CyberArk-vaulted credentials
+B-007,T1657,clear,Fraudulent SWIFT MT103 payment fabrication by insider
+B-007,T1005,clear,Oracle DB data access and customer PII exfiltration by privileged user
+B-009,T1199,clear,MSSP as trusted third party pivoted via VPN and API integration
+B-009,T1133,clear,MSSP VPN connection to NordFinans environment exploited
+B-009,T1562,clear,Suppressing or manipulating Sentinel SIEM alerting rules described
+B-009,T1078,plausible,MSSP credentials used for authenticated VPN access
+B-009,T1213,plausible,Sentinel log data exfiltration for security architecture mapping
+B-011,T1199,clear,Euronet ATM processor trusted VPN connection exploited
+B-011,T1133,clear,Dedicated VPN tunnel to ATM-facing network segment
+B-011,T1657,clear,ATM cash-out and jackpotting fraud explicitly described
+B-011,T1046,plausible,Probing VPN termination point and ATM segment hosts for vulnerabilities
+B-011,T1210,plausible,Exploiting insufficient segmentation for lateral movement from ATM segment
+B-012,T1199,clear,Temenos vendor support VPN as trusted channel to core banking
+B-012,T1133,clear,VPN connection to T24 on-premises environment
+B-012,T1005,clear,Oracle DB data exfiltration (customer records and transaction data)
+B-012,T1078,plausible,Vendor support VPN credentials and certificates used for access
+B-012,T1505,plausible,Persistent backdoor implanted in T24 application layer
+B-012,T1565,plausible,Account balance and transaction record manipulation described
+B-013,T1566,clear,Phishing campaign targeting treasury and payments staff
+B-013,T1557,clear,AiTM phishing with real-time MFA relay explicitly described in run 2
+B-013,T1539,clear,Post-authentication session cookie capture explicitly described
+B-013,T1114,clear,Mailbox access via Microsoft Graph API and email forwarding rules
+B-013,T1656,clear,CFO and executive impersonation for fraudulent payment instructions
+B-013,T1657,clear,Fraudulent payment redirection and BEC financial theft
+B-013,T1111,clear,MFA bypass via AiTM proxy interception explicitly described
+B-013,T1098,plausible,Email forwarding rules established for invisible monitoring
+B-013,T1565,plausible,Payment instruction emails modified in transit
+B-013,T1213,plausible,Sensitive internal communications and regulatory correspondence accessed
+B-013,T1078,plausible,Session cookie grants authenticated account access post-MFA bypass
+B-014,T1530,clear,Misconfigured Azure Blob Storage with anonymous access explicitly described
+B-014,T1552,clear,Leaked SAS token on GitHub and unsecured pipeline credentials described
+B-014,T1078,plausible,Overly permissive Managed Identity roles and service principals
+B-014,T1190,plausible,Misconfigured Azure App Service with authentication bypass
+B-014,T1595,plausible,Automated cloud scanning tools (Shodan) for asset discovery
+B-014,T1580,plausible,Cloud infrastructure discovery of misconfigured Azure resources

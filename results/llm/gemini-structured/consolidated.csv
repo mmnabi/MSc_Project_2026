@@ -1,0 +1,68 @@
+threat_id,technique_id,threat_description,run_1,run_2,run_3,included
+GS-001,T1595,Active Scanning,1,1,1,1
+GS-002,T1593,Search Open Websites/Domains,1,1,0,1
+GS-003,T1592,Gather Victim Host Information,1,0,1,1
+GS-004,T1589,Gather Victim Identity Information,1,0,1,1
+GS-005,T1584,Compromise Infrastructure,1,0,0,0
+GS-006,T1587,Develop Capabilities,1,1,1,1
+GS-007,T1583,Acquire Infrastructure,1,1,1,1
+GS-008,T1566,Phishing,1,1,1,1
+GS-009,T1190,Exploit Public-Facing Application,1,1,1,1
+GS-010,T1133,External Remote Services,1,1,1,1
+GS-011,T1195,Supply Chain Compromise,1,0,0,0
+GS-012,T1059,PowerShell,1,1,1,1
+GS-013,T1204,User Execution,1,0,1,1
+GS-014,T1078,Valid Accounts,1,1,1,1
+GS-015,T1136,Create Account: Cloud Account,1,1,1,1
+GS-016,T1053,Scheduled Task/Job: Scheduled Task,1,1,0,1
+GS-017,T1558,Kerberoasting,1,1,1,1
+GS-018,T1068,Exploitation for Privilege Escalation,1,1,1,1
+GS-019,T1562,Impair Defenses: Disable or Modify Tools,1,1,1,1
+GS-020,T1027,Obfuscated Files or Information,1,1,1,1
+GS-021,T1550,Use Alternate Authentication Material: Pass the Hash,1,1,1,1
+GS-022,T1070,Indicator Removal: File Deletion,1,0,1,1
+GS-023,T1003,OS Credential Dumping: LSASS Memory,1,1,1,1
+GS-024,T1110,Brute Force: Password Spraying,1,0,0,0
+GS-025,T1528,Steal Application Access Token,1,1,0,1
+GS-026,T1087,Account Discovery: Domain Account,1,1,1,1
+GS-027,T1046,Network Service Discovery,1,1,1,1
+GS-028,T1526,Cloud Service Discovery,1,0,0,0
+GS-029,T1021,Remote Services: Remote Desktop Protocol,1,1,1,1
+GS-030,T1570,Lateral Tool Transfer,1,0,0,0
+GS-031,T1210,Exploitation of Remote Services,1,0,1,1
+GS-032,T1213,Data from Information Repositories: Databases,1,1,1,1
+GS-033,T1114,Email Collection: Remote Public or Shared Mailbox,1,1,0,1
+GS-034,T1530,Data from Cloud Storage Object,1,1,0,1
+GS-035,T1071,Application Layer Protocol: Web Protocols,1,1,1,1
+GS-036,T1573,Encrypted Channel: Symmetric Cryptography,1,0,0,0
+GS-037,T1105,Ingress Tool Transfer,1,0,1,1
+GS-038,T1041,Exfiltration Over C2 Channel,1,1,1,1
+GS-039,T1567,Exfiltration Over Web Service: Exfiltration to Cloud Storage,1,1,1,1
+GS-040,T1048,Exfiltration Over Alternative Protocol,1,1,1,1
+GS-041,T1486,Data Encrypted for Impact,1,1,1,1
+GS-042,T1487,Financial Theft,1,0,0,0
+GS-043,T1489,Service Stop,1,0,0,0
+GS-044,T1485,Data Destruction,1,0,0,0
+GS-045,T1590,Gather Victim Host Information:,0,1,1,1
+GS-046,T1586,Compromise Accounts: Email Accounts:,0,1,0,0
+GS-047,T1199,Trusted Relationship:,0,1,0,0
+GS-048,T1098,Account Manipulation: Additional Cloud Credentials:,0,1,1,1
+GS-049,T1548,Abuse Elevation Control Mechanism: Bypass User Account Control:,0,1,1,1
+GS-050,T1036,Masquerading:,0,1,0,0
+GS-051,T1555,Credentials from Password Stores:,0,1,1,1
+GS-052,T1580,Cloud Infrastructure Discovery:,0,1,0,0
+GS-053,T1090,Proxy:,0,1,0,0
+GS-054,T1565,Data Manipulation: Transmitted Data Manipulation:,0,1,1,1
+GS-055,T1499,Endpoint Denial of Service: Application Exhaustion Flood:,0,1,0,0
+GS-056,T1491,Defacement:,0,1,0,0
+GS-057,T1585,Establish Accounts: Adversaries may create accounts with third-party provider (TPP) services to legally probe the Open Banking APIs for vulnerabilities. They might also create fake social media profil,0,0,1,0
+GS-058,T1547,Boot or Logon Autostart Execution: Adversaries will place malware or scripts in registry run keys or user startup folders on Windows 11 workstations to ensure their code executes automatically upon lo,0,0,1,0
+GS-059,T1556,"Modify Authentication Process: The stated gap that ""MFA not universally enforced for internal applications"" is a critical vulnerability. An attacker with standard user credentials can move laterally t",0,0,1,0
+GS-060,T1218,"System Binary Proxy Execution: Adversaries will use legitimate, signed Microsoft binaries (e.g., rundll32.exe, regsvr32.exe) to execute malicious code. This helps bypass application whitelisting and c",0,0,1,0
+GS-061,T1482,"Domain Trust Discovery: Adversaries will map out the AD domain and forest trusts to understand how they can move from the office LAN into more sensitive zones, such as the core banking network.",0,0,1,0
+GS-062,T1614,"System Language Discovery: Especially relevant for a Nordic bank, attackers will check system language settings to tailor social engineering or avoid detection by appearing as a local user.",0,0,1,0
+GS-063,T1560,"Archive Collected Data: Before exfiltration, adversaries will stage collected data on an internal server and compress it into encrypted archives (e.g., password-protected ZIP files) to avoid detection",0,0,1,0
+GS-064,T1039,"Data from Network Shared Drive: Attackers will search SharePoint Online sites and on-premises file shares for sensitive documents, such as internal audits, network diagrams, M&A plans, or customer PII",0,0,1,0
+GS-065,T1571,"Non-Standard Port: To evade simple port-based firewall rules, attackers may run their C2 protocol over a non-standard port that is commonly allowed outbound, such as port 53 (DNS) but using TCP instea",0,0,1,0
+GS-066,T1657,"Financial Theft: For a sophisticated actor, the primary objective could be direct financial theft. By compromising the SWIFT secure zone and obtaining operator credentials, they could initiate fraudul",0,0,1,0
+GS-067,T1490,"Inhibit System Recovery: As part of a ransomware attack, adversaries will actively target and delete backups that are accessible from the network before encrypting production systems, undermining Nord",0,0,1,0

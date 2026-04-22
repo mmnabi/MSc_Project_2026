@@ -1,0 +1,840 @@
+# NordFinans Bank AB — MITRE ATT&CK Enterprise Threat Identification
+**Analytical Lens:** MITRE ATT&CK Enterprise v15  
+**Classification:** Fictional — For Academic/Research Use Only  
+**Scope:** All 14 Enterprise Tactics  
+
+---
+
+## Analytical Framing
+
+NordFinans presents a high-value, multi-surface target profile. Three threat actor categories dominate:
+
+- **State-sponsored APTs (Lazarus/APT38, Fancy Bear affiliates):** Motivated by SWIFT fraud and financial system disruption. APT38 specifically has a documented playbook targeting SWIFT Alliance environments, involving long-dwell reconnaissance, SWIFT operator account compromise, and destructive wipers deployed post-fraud.
+- **Ransomware operators (LockBit, BlackCat/ALPHV, Play):** Financial sector campaigns with double-extortion focus. NordFinans' GDPR exposure across 500,000 customers amplifies leverage.
+- **Fraud-motivated cybercriminals (TA505, FIN7 successors):** Business email compromise, banking trojan deployment, credential theft, and account takeover.
+
+The most dangerous attack chains for NordFinans combine Initial Access via phishing or trusted third-party abuse → lateral movement to SWIFT secure zone → SWIFT fraud + destructive wiper, and separately, ransomware deployment during after-hours when only the MSSP is watching.
+
+---
+
+## Tactic 1: Reconnaissance (TA0043)
+
+### T1591 — Gather Victim Org Information
+
+**T1591.001 — Determine Physical Locations**
+NordFinans' two co-located data centers (Stockholm, Gothenburg) and four Nordic branch offices are discoverable through annual reports, Finansinspektionen regulatory filings, and LinkedIn. Physical locations inform targeting of branch offices — which may have weaker security controls than HQ — as entry points for credential harvesting or physical intrusion enabling network access.
+
+**T1591.002 — Business Relationships**
+As a publicly traded company subject to DORA and PSD2, NordFinans discloses significant vendor relationships. Annual reports, procurement notices, and job postings reveal the Temenos T24, Azure, CrowdStrike, and SWIFT Alliance technology stack. Adversaries will specifically research Temenos support VPN procedures, MSSP identity (Nordic MSSP), and ATM processor (Euronet) to pre-plan trusted-relationship attacks. FinansCERT membership is also publicly documented, revealing sector intelligence-sharing relationships.
+
+**T1591.004 — Identify Roles**
+LinkedIn enumeration will identify SWIFT operators, core banking admins, Azure platform engineers, and the DPO. Job postings for "Temenos T24 developer" or "Azure Security Engineer" inadvertently confirm technology stack and organizational gaps. Executive profiles are visible on Nasdaq Stockholm disclosures. Role-specific targeting enables high-precision spearphishing.
+
+---
+
+### T1590 — Gather Victim Network Information
+
+**T1590.001 — Domain Properties / T1590.002 — DNS**
+DNS enumeration against NordFinans' domain namespace will surface Azure Front Door CDN endpoints, Azure API Management custom domains (PSD2 Open Banking APIs), and mail exchange records (Exchange Online via M365). Certificate Transparency logs reveal subdomains not otherwise advertised. Azure resource endpoints (*.azurewebsites.net, *.azure-api.net) associated with the web banking portal and Open Banking APIs are particularly valuable for pre-attack reconnaissance.
+
+**T1590.005 — IP Addresses**
+RIPE NCC records for Swedish ASNs may partially reveal co-location IP blocks. Passive DNS and historical scan data (Shodan/Censys) against NordFinans' IP ranges will identify service versions, TLS certificate details, and potentially misconfigured cloud resources. Azure Public IP ranges used by NordFinans are identifiable through reverse DNS and cloud metadata.
+
+---
+
+### T1595 — Active Scanning
+
+**T1595.001 — Scanning IP Blocks**
+Adversaries will conduct targeted port and service scanning against NordFinans' external perimeter: web banking portal (Azure App Service/Front Door), Open Banking API gateway (Azure API Management), and any externally exposed VPN concentrators. Azure WAF and Front Door provide some protection, but misconfigured origin IP exposure could allow direct-to-backend scanning.
+
+**T1595.002 — Vulnerability Scanning**
+Automated vulnerability scanning of the web banking portal (.NET on Azure App Service) and Open Banking API endpoints to identify unpatched CVEs, misconfigured OAuth endpoints, and API security weaknesses (broken object-level authorization, etc.). NordFinans' quarterly external scan cadence means a new critical vulnerability published between scan cycles may remain undetected externally for up to 90 days.
+
+---
+
+### T1593 — Search Open Websites/Domains
+
+**T1593.001 — Social Media**
+LinkedIn provides a complete organizational directory. Adversaries building targeted campaigns will map the org chart, identify SWIFT operators and core banking admins, and harvest employee email formats. GitHub/Stack Overflow profiles of internal developers may inadvertently expose code patterns, internal tooling names, or configuration snippets.
+
+**T1593.002 — Search Engines**
+Google dorking for NordFinans-specific strings (error messages, internal application names, exposed configuration files indexed before proper access controls were applied) and searching for cached versions of development/staging endpoints. Azure DevOps public project leakage is a known risk for organizations that misconfigure project visibility.
+
+---
+
+### T1596 — Search Open Technical Databases
+
+**T1596.005 — Scan Databases**
+Shodan/Censys searches for Temenos T24-specific service banners, Oracle DB listener ports from co-location IP ranges, and Cisco AnyConnect VPN endpoints. Temenos T24 has a recognizable web UI fingerprint that can help adversaries confirm the core banking platform and look up known CVEs for that specific version.
+
+---
+
+### T1597 — Search Closed Sources
+
+**T1597.001 — Threat Intel Vendors**
+Underground forums and dark web marketplaces are searched for previously stolen NordFinans employee credentials, historical breach data targeting Nordic banks, and any available initial access listings ("bank network access for sale"). Banking sector credentials have high market value on criminal forums.
+
+---
+
+### T1598 — Phishing for Information
+
+**T1598.003 — Spearphishing Link**
+Pre-attack credential harvesting via fake M365 login pages targeting employees identified through LinkedIn. The goal is not initial access but intelligence gathering — confirming valid email formats, testing phishing defenses (Microsoft Defender for Office 365 detection rates), and establishing which employees respond to specific lures before a full campaign.
+
+---
+
+## Tactic 2: Resource Development (TA0042)
+
+### T1583 — Acquire Infrastructure
+
+**T1583.001 — Domains**
+Typosquatting registrations mimicking NordFinans domains (nordfinans-secure[.]com, nordfinans-login[.]se, etc.) for phishing campaigns targeting both employees and customers. Lookalike domains targeting the Open Banking API gateway could be used to intercept TPP developer communications. Nordic ccTLD (.se, .no, .dk, .fi) registrations add regional credibility.
+
+**T1583.003 — Virtual Private Server**
+Establishing C2 infrastructure in Azure North Europe — the same region NordFinans operates in — to blend C2 traffic with legitimate cloud traffic and complicate geographic blocking. Adversaries may deliberately provision infrastructure within Microsoft ASNs to exploit CDN/cloud trust relationships.
+
+**T1583.006 — Web Services**
+Using legitimate Microsoft Azure services (Blob Storage, Azure Functions), OneDrive, or GitHub as C2 relay infrastructure. NordFinans' extensive Azure footprint and M365 integration means traffic to these services is normal, trusted by firewalls, and whitelisted in network policy — making cloud-hosted C2 extremely difficult to detect without behavioral analytics.
+
+---
+
+### T1585 — Establish Accounts
+
+**T1585.001 — Social Media Accounts**
+Creating convincing fake LinkedIn profiles of Temenos support personnel, Finansinspektionen compliance officers, or FinansCERT representatives for social engineering campaigns targeting NordFinans IT staff. The bank's stated FinansCERT membership and regulatory compliance pressures (DORA deadline) create natural pretexts.
+
+**T1585.002 — Email Accounts**
+Establishing look-alike email accounts (temenos-support@outlook.com, finansinspektionen-alert@gmail.com) for vendor impersonation campaigns. Targeting SWIFT operators with fake SWIFT CSP compliance notifications has been a documented APT38 technique.
+
+---
+
+### T1586 — Compromise Accounts
+
+**T1586.002 — Email Accounts**
+Compromising legitimate email accounts of third-party TPPs who have active OAuth 2.0 authorization with NordFinans' Open Banking APIs. A TPP with a compromised email account could be used to conduct social engineering against NordFinans API support staff, or to initiate unauthorized account information/payment requests if OAuth token scope is excessive.
+
+---
+
+### T1587 — Develop Capabilities
+
+**T1587.001 — Malware**
+Development of custom malware targeting Temenos T24's Linux/Oracle environment or SWIFT Alliance Lite2 components. APT38's documented EVTDIAG, MSOUTC, and ROTTEN malware families were purpose-built for SWIFT environments. A sufficiently motivated adversary would invest in T24-aware tooling that can traverse the co-location database environment without triggering known signatures.
+
+**T1587.003 — Digital Certificates**
+Obtaining fraudulent TLS certificates for NordFinans lookalike domains (leveraging DV certificate automation via ACME protocol) to make phishing pages and AiTM proxies convincing. Acquiring or generating code signing certificates to sign malicious payloads and reduce CrowdStrike Falcon detection probability.
+
+---
+
+### T1588 — Obtain Capabilities
+
+**T1588.001 — Malware**
+Acquiring banking trojans (QakBot successor variants, IcedID, DarkGate) with established delivery infrastructure targeting M365 environments. Ransomware-as-a-Service kits with ESXI/Linux encryptors to target Temenos T24's RHEL environment. SWIFT-targeting modules are sold in elite criminal forums.
+
+**T1588.002 — Tool**
+Acquiring Cobalt Strike, Brute Ratel C4, or Sliver for post-exploitation frameworks. These tools have known CrowdStrike Falcon evasion techniques and are routinely used against financial sector targets. Purchasing BloodHound/SharpHound for AD attack path analysis.
+
+---
+
+## Tactic 3: Initial Access (TA0001)
+
+### T1566 — Phishing
+
+**T1566.001 — Spearphishing Attachment**
+Targeted spearphishing of NordFinans employees via malicious Office documents, ISO files, or PDF lures. M365 is the primary delivery surface — Microsoft Defender for Office 365 provides defense but is not impenetrable, particularly against zero-day or obfuscated payloads. High-value targets: SWIFT operators (lure: SWIFT CSP audit notification), Azure platform admins (lure: Azure security advisory), and finance staff (lure: payment confirmation). The bank's DORA implementation timeline creates a credible regulatory pretext.
+
+**T1566.002 — Spearphishing Link**
+Adversary-in-the-Middle (AiTM) phishing against M365 accounts using reverse-proxy toolkits (Evilginx2, Modlishka). AiTM attacks transparently proxy the legitimate M365 login page, capturing both credentials and the post-MFA session cookie — bypassing Microsoft Authenticator MFA entirely. This is a critical threat given that MFA is the primary credential protection for remote access, and session cookie theft renders it ineffective. The ~40% hybrid workforce creates a large population of remote M365 users who regularly authenticate.
+
+**T1566.003 — Spearphishing via Service**
+Phishing via Microsoft Teams. As M365 is the collaboration platform, attackers with one compromised internal account — or using external Teams federation if enabled — can send malicious links to colleagues, impersonating IT support or the Nordic MSSP. Internal Teams messages typically receive less scrutiny than email.
+
+---
+
+### T1190 — Exploit Public-Facing Application
+
+**Web Banking Portal (.NET / Azure App Service)**
+SQL injection, authentication bypass, or server-side request forgery (SSRF) against the .NET web banking application. SSRF is particularly dangerous in Azure-hosted applications as it can be used to query the Azure Instance Metadata Service (IMDS) for OAuth tokens assigned to the App Service managed identity, enabling lateral movement into Azure resources.
+
+**Open Banking API Gateway (Azure API Management)**
+API-specific attacks: broken object-level authorization (BOLA/IDOR) to access other customers' account data, excessive data exposure in API responses, and OAuth 2.0 authorization code injection. PSD2 API gateways are high-value targets because they are externally mandated and carry real payment initiation capability. Misconfigured OAuth scope validation is a known weakness in PSD2 implementations.
+
+---
+
+### T1133 — External Remote Services
+
+**Cisco AnyConnect VPN**
+Exploitation of known Cisco AnyConnect/Secure Client CVEs or credential stuffing/brute force against the VPN portal. While MFA is enforced for remote access, VPN infrastructure vulnerabilities (e.g., SSL VPN authentication bypass bugs) could allow pre-authentication exploitation. The VPN endpoint is externally accessible and a primary entry point for remote employees.
+
+**Temenos Vendor Support VPN**
+The Temenos support VPN is a trusted-but-not-fully-controlled entry point. Third-party vendor access channels are a documented initial access vector: if Temenos support credentials are compromised, the VPN provides a pathway directly into the core banking network segment. Third-party risk management is acknowledged as a gap.
+
+---
+
+### T1195 — Supply Chain Compromise
+
+**T1195.002 — Compromise Software Supply Chain**
+Compromise of NordFinans' Azure DevOps CI/CD pipeline dependencies. Internal applications use .NET, Java, and Python — all with package manager dependencies (NuGet, Maven, PyPI). A malicious package injected into these ecosystems (dependency confusion attack, typosquatting attack on internal feed naming) would execute within the build pipeline and potentially deploy backdoored code to production Azure services. Azure DevOps is explicitly listed as a key asset and known gap.
+
+**Temenos/CrowdStrike Update Mechanism**
+A compromised software update to Temenos T24 (delivered via vendor support VPN) or the CrowdStrike Falcon agent (centrally managed, deployed to all 2,200 Windows endpoints) would represent a privileged and extremely wide-reach supply chain compromise. The SolarWinds and XZ Utils incidents demonstrate that vendor update mechanisms are viable attack vectors.
+
+---
+
+### T1199 — Trusted Relationship
+
+**Nordic MSSP**
+The after-hours MSSP has VPN and API integration into NordFinans' environment, including access to Microsoft Sentinel. A compromised MSSP represents both a detection blind spot (the MSSP would be suppressing alerts rather than raising them) and a potential network entry point. The 18:00–08:00 CET window when MSSP monitoring is sole coverage is the highest-risk period for undetected intrusion.
+
+**Euronet ATM Processor**
+Euronet's dedicated VPN tunnel to NordFinans' core banking system is a medium-risk but real lateral movement pathway. ATM processor compromise has been used in "jackpotting" campaigns and as a pivot to core banking networks.
+
+**Third-Party TPPs (Open Banking)**
+Authorized TPPs hold valid OAuth 2.0 tokens. A compromised TPP could legitimately authenticate to NordFinans' API gateway and initiate fraudulent payment requests within their authorized scope, potentially at scale before fraud detection triggers.
+
+---
+
+### T1078 — Valid Accounts
+
+**T1078.002 — Domain Accounts**
+Credentials obtained through phishing, dark web purchase, or credential stuffing used to authenticate to internal systems. The gap that MFA is not universally enforced for internal applications means that a compromised domain account may provide access to internal systems without an additional authentication factor.
+
+**T1078.004 — Cloud Accounts**
+Compromised Azure AD accounts used to access Azure portal, Azure DevOps, SharePoint Online, or Exchange Online. Azure AD is federated with on-premises AD via Azure AD Connect — compromise flows bidirectionally.
+
+---
+
+### T1189 — Drive-by Compromise
+
+Browser-based exploitation of hybrid employee endpoints via watering hole attacks. Financial industry news sites, Nordic banking industry portals, or Finansinspektionen-themed sites could be compromised to deliver browser exploits. The ~40% hybrid workforce (Windows 11, corporate-managed via Intune) accessing these sites from home networks may have relaxed browser security profiles.
+
+---
+
+## Tactic 4: Execution (TA0002)
+
+### T1059 — Command and Scripting Interpreter
+
+**T1059.001 — PowerShell**
+PowerShell is the dominant post-exploitation language on Windows. NordFinans' ~2,200 Windows 11 endpoints and Windows Server 2019/2022 servers are the primary surface. Attackers will use PowerShell for discovery, lateral movement preparation, and payload delivery. Constrained Language Mode and AMSI (Antimalware Scan Interface) are defenses, but CrowdStrike provides the main behavioral detection layer here.
+
+**T1059.004 — Unix Shell**
+Bash execution on the ~150 RHEL 8/9 servers including the Temenos T24 Linux environment and Azure VMs. Shell commands are used for discovery, persistence, and data collection once a Linux system is compromised. Linux EDR coverage is less mature than Windows in most environments — this is an important gap to assess for the Temenos environment specifically.
+
+**T1059.006 — Python**
+Python is in use for internally developed applications. A compromised Python execution environment (via malicious package, script injection, or compromised developer workstation) enables attacker-controlled code execution within the application tier. Azure Functions running Python are also an execution surface.
+
+---
+
+### T1204 — User Execution
+
+**T1204.002 — Malicious File**
+Employees executing malicious attachments delivered via phishing. Modern delivery uses container formats (ISO, VHD, ZIP with LNK) to bypass Mark-of-the-Web protections. Microsoft Defender for Office 365 is the primary filter; detonation in sandbox may be evaded by time-delayed or environment-checking payloads.
+
+**T1204.001 — Malicious Link**
+Employees clicking phishing links leading to AiTM credential-harvesting proxies or drive-by download pages. Teams-delivered links may bypass email-specific security filters.
+
+---
+
+### T1072 — Software Deployment Tools
+
+Azure DevOps CI/CD pipelines deploy code to production Azure App Services and potentially to on-premises systems. If an attacker compromises the Azure DevOps environment (via compromised developer credentials, supply chain attack, or pipeline misconfiguration), they can inject malicious code into deployment artifacts that execute with application-tier privileges across the entire deployed environment. This is a high-leverage execution vector with broad impact.
+
+---
+
+### T1053 — Scheduled Task/Job
+
+**T1053.005 — Scheduled Task (Windows)**
+Creating Windows scheduled tasks on compromised servers or endpoints for persistent execution. Legitimate-looking task names (e.g., mimicking Windows Update or Defender tasks) evade casual inspection.
+
+**T1053.003 — Cron**
+Creating cron jobs on RHEL servers and the Temenos T24 Linux environment for persistent execution and data collection automation.
+
+---
+
+### T1047 — Windows Management Instrumentation
+
+WMI event subscriptions and WMI-based remote execution on Windows servers. WMI is a legitimate Windows component with deep system access, making WMI-based execution difficult to distinguish from normal administrative activity. Relevant on Windows Server 2019/2022 systems in the core banking zone.
+
+---
+
+### T1106 — Native API
+
+Direct Windows API calls to execute payloads without invoking suspicious scripting interpreters — a technique used specifically to evade AMSI and script-based behavioral detection by CrowdStrike. More sophisticated APT tooling uses direct syscalls to further evade EDR hooking.
+
+---
+
+## Tactic 5: Persistence (TA0003)
+
+### T178 — Valid Accounts
+
+**T1078.003 — Local Accounts**
+Service accounts not covered by CyberArk PAM (~200 privileged accounts managed, but the full ~3,500 account environment likely includes unvaulted service accounts). Unmanaged service accounts with static passwords represent persistent access even after the initial intrusion vector is remediated.
+
+**T1078.004 — Cloud Accounts**
+Maintaining access via compromised Azure AD accounts, particularly those not subject to regular access recertification. Azure AD service principals (used by applications and automation) often have long-lived credentials that are not rotated and not visible in quarterly access reviews.
+
+---
+
+### T1098 — Account Manipulation
+
+**T1098.001 — Additional Cloud Credentials**
+Adding client secrets or certificates to existing Azure service principals to establish persistent cloud access that survives password resets on the corresponding Azure AD user account.
+
+**T1098.005 — Device Registration**
+Registering an attacker-controlled device into Azure AD. Once registered, the device can be used to obtain Azure AD tokens for the compromised user's applications without needing the user's password again, as long as the device remains registered. Persistent access survives credential rotation.
+
+**T1098.003 — Additional Cloud Roles**
+Assigning elevated Azure RBAC roles to attacker-controlled accounts or service principals for persistent privileged access to Azure resources (Key Vaults, Storage Accounts, Azure DevOps).
+
+---
+
+### T1505 — Server Software Component
+
+**T1505.003 — Web Shell**
+Deploying a web shell on the Azure App Service-hosted web banking portal after exploiting an application vulnerability. Web shells provide persistent HTTP-based access to server-side execution. Azure App Service deployment slots and continuous deployment from Azure DevOps may be abused to re-deploy web shells after discovery.
+
+---
+
+### T1556 — Modify Authentication Process
+
+**T1556.007 — Hybrid Identity**
+Manipulating the Azure AD Connect synchronization configuration to inject a backdoor. Azure AD Connect has extensive permissions in both on-premises AD and Azure AD. Modifying pass-through authentication agents or federation settings can enable persistent authentication bypass. This is a high-sophistication but high-value persistence technique specifically relevant to hybrid AD environments.
+
+**T1556.006 — Multi-Factor Authentication**
+Registering attacker-controlled authentication methods (phone number, authenticator app) to a compromised Azure AD account, ensuring persistent MFA-capable access even after the victim's password is rotated.
+
+---
+
+### T1136 — Create Account
+
+**T1136.002 — Domain Account / T1136.003 — Cloud Account**
+Creating backdoor accounts in on-premises AD or Azure AD with names mimicking legitimate service accounts or system processes. Quarterly access recertification is a mitigating control, but accounts created after a recent review cycle have up to 90 days before they would be flagged.
+
+---
+
+### T1543 — Create or Modify System Process
+
+**T1543.003 — Windows Service**
+Installing malicious Windows services on servers in the core banking zone or management zone for persistent execution with SYSTEM privileges. Services with names mimicking legitimate Windows or application services evade casual review.
+
+---
+
+## Tactic 6: Privilege Escalation (TA0004)
+
+### T1068 — Exploitation for Privilege Escalation
+
+**Legacy Java components in Temenos T24**
+This is an explicitly acknowledged gap. Older Java versions have well-documented deserialization vulnerabilities (Java RMI, Apache Commons Collections gadget chains) that allow remote code execution and local privilege escalation within the T24 application tier. Exploiting these from an initial foothold in the core banking network zone could yield elevated access to the T24 application and Oracle DB.
+
+**Linux kernel vulnerabilities on RHEL**
+Privilege escalation exploits targeting RHEL 8/9 kernel versions (e.g., Dirty Pipe/CVE-2022-0847 class vulnerabilities) could elevate a low-privilege user to root on Temenos Linux hosts. Monthly internal vulnerability scans provide defense but a zero-day or slow patch cycle creates a window.
+
+---
+
+### T1558 — Steal or Forge Kerberos Tickets
+
+**T1558.003 — Kerberoasting**
+Service accounts in NordFinans' ~3,500-account AD environment are likely assigned SPNs for application integration (T24, SAP, internal apps). Kerberoasting — requesting Kerberos service tickets for these SPNs offline — allows password cracking without authentication alerts. Service accounts often have weak or static passwords and elevated privileges. No specific Kerberoasting detection is mentioned in the SOC tooling.
+
+**T1558.001 — Golden Ticket**
+If an adversary achieves Domain Admin or DC access (which the SWIFT-targeting attack chain requires), forging a Golden Ticket using the KRBTGT hash provides unrestricted, long-lasting authentication as any user. This would persist through most remediation attempts short of a full KRBTGT password reset cycle.
+
+---
+
+### T1134 — Access Token Manipulation
+
+**T1134.001 — Token Impersonation/Theft**
+On a compromised Windows server, impersonating the security token of a higher-privileged user who has an active session (e.g., a domain admin performing scheduled maintenance). This is a fundamental Windows privilege escalation technique relevant to any environment with privileged user activity on multi-user systems.
+
+---
+
+### T1484 — Domain Policy Modification
+
+**T1484.002 — Domain Trust Modification**
+Abusing the hybrid AD trust between on-premises AD and Azure AD. Once on-premises AD is compromised, an attacker can escalate into Azure AD by manipulating the Azure AD Connect sync service account (which holds significant permissions) or by modifying federation trust settings. The reverse path — Azure AD compromise to on-premises AD — is also viable via Azure AD Connect's write-back permissions.
+
+---
+
+### T1611 — Escape to Host
+
+Azure containerized microservices (mobile banking backend runs as Azure-hosted backend microservices) present a container escape attack surface. A vulnerability in container runtime or a misconfigured privileged container could allow escape from the container to the underlying Azure VM, escalating from application-tier to infrastructure-tier access.
+
+---
+
+### T1548 — Abuse Elevation Control Mechanism
+
+**T1548.002 — Bypass User Account Control**
+UAC bypass techniques on Windows endpoints and servers allow elevation from standard user to Administrator without triggering UAC prompts. Relevant for initial escalation on Windows 11 workstations before obtaining domain-level credentials.
+
+---
+
+## Tactic 7: Defense Evasion (TA0005)
+
+### T1562 — Impair Defenses
+
+**T1562.001 — Disable or Modify Tools**
+Attempting to disable, tamper with, or unload the CrowdStrike Falcon sensor. CrowdStrike uses kernel-level protections that are difficult to disable without high privileges, but attackers with SYSTEM/root access may attempt kernel driver attacks, process hollowing of the sensor, or exploiting known EDR evasion techniques. SWIFT-targeting malware historically has included components to disable security software before the fraud execution phase.
+
+**T1562.002 — Disable Windows Event Logging**
+Disabling or clearing Windows Event Logs before or during the attack to prevent forensic reconstruction. On the Temenos environment, disabling syslog forwarding to Microsoft Sentinel would create a detection gap without immediate alerting if log volume monitoring is not in place.
+
+**T1562.006 — Indicator Blocking**
+Blocking telemetry to Microsoft Sentinel from compromised hosts, or tampering with the Sentinel agent to prevent alert generation. If an adversary identifies that Sentinel is the SIEM, they may specifically target its data connectors.
+
+---
+
+### T1550 — Use Alternate Authentication Material
+
+**T1550.001 — Application Access Token**
+Using stolen OAuth 2.0 tokens from compromised TPPs or internal applications to authenticate to the Open Banking API gateway without needing credentials. Token reuse within the validity window does not generate new authentication events. Overly broad OAuth scopes amplify the impact of a single stolen token.
+
+**T1550.002 — Pass the Hash**
+Using NTLM hashes captured from LSASS on one Windows system to authenticate to other Windows systems without cracking the password. Relevant for lateral movement in the internal network between Windows servers (core banking zone, management zone). Mitigated by Credential Guard if enabled.
+
+**T1550.003 — Pass the Ticket**
+Using captured Kerberos tickets (TGT or service tickets) for lateral movement. Golden/Silver tickets fall under this category. Relevant given the hybrid AD environment.
+
+---
+
+### T1027 — Obfuscated Files or Information
+
+**T1027.010 — Command Obfuscation**
+Heavily obfuscated PowerShell (invoke-obfuscation, string concatenation, encoding) to evade static signature detection by Microsoft Defender and Sentinel analytics rules. AMSI is a runtime defense, but sophisticated obfuscation combined with AMSI bypass techniques (memory patching) is well-documented.
+
+**T1027.002 — Software Packing**
+Custom-packed malware designed to evade CrowdStrike Falcon's machine learning and behavioral engines. SWIFT-targeting APTs have demonstrated the capability to develop malware specifically designed to avoid specific security vendors' detections.
+
+---
+
+### T1218 — System Binary Proxy Execution
+
+Living-off-the-land binaries (LOLBins) — rundll32.exe, regsvr32.exe, mshta.exe, certutil.exe — used to proxy execution of malicious code through trusted Windows processes. This directly challenges CrowdStrike's behavioral detection and evades application whitelisting policies that permit standard Windows binaries.
+
+---
+
+### T1070 — Indicator Removal
+
+**T1070.001 — Clear Windows Event Logs**
+Clearing Security, System, and Application event logs on compromised hosts during or after the attack. Particularly impactful given that CrowdStrike telemetry (cloud-based) and Sentinel ingest are primary forensic sources — if CrowdStrike is disabled and logs are cleared, forensic reconstruction becomes difficult.
+
+**T1070.006 — Timestomp**
+Modifying file timestamps on malware artifacts to blend with legitimate system files and confuse timeline forensics.
+
+---
+
+### T1090 — Proxy
+
+**T1090.004 — Domain Fronting**
+Using Azure Front Door or Azure CDN (which NordFinans itself uses for the web banking portal) as a domain front for C2 traffic. This makes C2 traffic appear to originate from legitimate Microsoft infrastructure — practically impossible to block without disrupting NordFinans' own services.
+
+---
+
+### T1620 — Reflective Code Loading
+
+Loading malicious DLLs or shellcode directly into memory without writing to disk, evading file-based detection by CrowdStrike and AV. This is a standard capability of Cobalt Strike and similar frameworks.
+
+---
+
+### T1606 — Forge Web Credentials
+
+**T1606.002 — SAML Tokens**
+Golden SAML attack: stealing the SAML token-signing certificate from ADFS (if used) or from Azure AD Connect to forge SAML assertions, enabling authentication as any user to any SAML-federated application without knowing the user's password and without triggering per-user authentication events.
+
+---
+
+## Tactic 8: Credential Access (TA0006)
+
+### T1110 — Brute Force
+
+**T1110.003 — Password Spraying**
+Low-and-slow password spraying against Azure AD / M365 — trying one or two common passwords across thousands of accounts to stay below lockout thresholds. The ~3,500 AD accounts provide a large target surface. Many accounts may share common patterns (seasonal passwords, company name variants) particularly where MFA is not enforced on internal applications.
+
+**T1110.004 — Credential Stuffing**
+Using previously breached credential databases against the web banking portal login, mobile banking API authentication, and Azure AD. With 500,000 retail customers, the probability of credential overlap with large breach datasets (RockYou2024, etc.) is statistically significant. Biometric authentication on mobile mitigates this for mobile users; the web portal is more exposed.
+
+---
+
+### T1003 — OS Credential Dumping
+
+**T1003.001 — LSASS Memory**
+Dumping LSASS process memory on compromised Windows systems to extract Kerberos tickets, NTLM hashes, and potentially cleartext credentials (depending on Windows credential caching settings). This is the primary Windows credential access technique. CrowdStrike Falcon detects LSASS dumping, but advanced techniques (DMA-based dumping, kernel-level access, MiniDumpWriteDump via custom loader) attempt to evade this detection.
+
+**T1003.006 — DCSync**
+Once Domain Admin privileges are achieved, using DCSync to remotely replicate credential material from a Domain Controller without logging on interactively. This yields all password hashes in the domain including KRBTGT — enabling Golden Ticket creation. CyberArk vaults domain admin credentials but a compromised session is sufficient.
+
+---
+
+### T1111 — Multi-Factor Authentication Interception
+
+AiTM proxy attacks that capture post-MFA session cookies during the authentication flow, as described in T1566.002. This is the primary MFA-bypass threat for the M365 environment. Microsoft Entra ID's Continuous Access Evaluation (CAE) and token binding features partially mitigate session cookie reuse, but implementation must be verified.
+
+---
+
+### T1621 — Multi-Factor Authentication Request Generation
+
+MFA fatigue (push bombing) attacks: generating repeated Microsoft Authenticator push notifications to a targeted employee until they approve out of frustration or confusion. This is a documented technique (used in the Uber breach, Lapsus$ campaigns) that specifically targets push-notification MFA without requiring a bypass proxy. High-value targets: SWIFT operators, Azure admins, domain admins.
+
+---
+
+### T1539 — Steal Web Session Cookie
+
+Stealing authenticated session cookies from browser-based web banking portal or Azure portal sessions on compromised employee endpoints via JavaScript injection, malware-based browser credential extraction, or AiTM proxy. Stolen cookies for Azure portal sessions grant cloud admin access within the token validity period.
+
+---
+
+### T1528 — Steal Application Access Token
+
+Stealing OAuth 2.0 access tokens from client-side application storage (mobile device memory, browser storage, Azure App Service configuration) or from token endpoints exposed due to misconfiguration in the Open Banking API gateway. Stolen tokens allow API-level access without authentication events.
+
+---
+
+### T1649 — Steal or Forge Authentication Certificates
+
+NordFinans operates HSMs for SWIFT key management and potentially for Azure Key Vault operations. While HSM keys cannot be exported, private keys stored in software certificate stores (on developer workstations, CI/CD pipeline secrets, misconfigured Key Vault policies) are vulnerable. Stolen code signing certificates allow signed malware; stolen TLS client certificates may allow authenticated API access.
+
+---
+
+### T1557 — Adversary-in-the-Middle
+
+**T1557.001 — LLMNR/NBT-NS Poisoning**
+On internal network segments without LLMNR/NBT-NS disabled, Responder-based poisoning captures NTLMv2 challenge-response hashes from Windows systems attempting to resolve local hostnames. In an office LAN or branch office environment, this yields a large volume of crackable hashes. This is an entry-level but highly effective credential access technique.
+
+---
+
+## Tactic 9: Discovery (TA0007)
+
+### T1087 — Account Discovery
+
+**T1087.002 — Domain Account**
+LDAP queries against Active Directory enumerate all ~3,500 accounts: users, service accounts, computer accounts, and group memberships. BloodHound/SharpHound graph analysis identifies attack paths to Domain Admin and to high-value targets such as SWIFT operator accounts and CyberArk admins. This is standard practice immediately after gaining a foothold.
+
+**T1087.004 — Cloud Account**
+Enumerating Azure AD users, service principals, managed identities, and application registrations. Azure AD enumeration reveals which applications are registered (including the Open Banking OAuth application), which service principals have elevated permissions, and which users are assigned privileged Azure roles.
+
+---
+
+### T1069 — Permission Groups Discovery
+
+**T1069.002 — Domain Groups**
+Identifying AD groups with privileged access: Domain Admins, SWIFT operators group, CyberArk admins, database administrators, T24 application admins. These are the critical groups targeted for privilege escalation. Quarterly recertification is a detective control but doesn't prevent real-time enumeration.
+
+**T1069.003 — Cloud Groups**
+Enumerating Azure AD groups and M365 groups (Teams channels, SharePoint sites). Groups assigned to Azure subscription roles (Owner, Contributor, Key Vault Administrator) are high-value targets.
+
+---
+
+### T1046 — Network Service Discovery
+
+Internal port scanning from a foothold in the office LAN or DMZ to map internal services: core banking API endpoints on the T24 MPLS segment, Oracle DB listener ports, SWIFT Alliance Lite2 management interfaces, CyberArk vault ports, and management interfaces (RDP, SSH, WinRM) on servers. Network segmentation via Palo Alto NGFWs is the primary mitigation; firewall rule quality is the key variable.
+
+---
+
+### T1580 — Cloud Infrastructure Discovery
+
+Enumerating Azure resources from a compromised Azure AD account or managed identity: subscriptions, resource groups, storage accounts, Azure Key Vaults (which may store encryption keys and secrets), Azure SQL databases, App Service configurations (which may contain connection strings), and Azure DevOps organization structure. Metadata service (IMDS) access from a compromised Azure VM provides a rich discovery endpoint.
+
+---
+
+### T1518 — Software Discovery
+
+**T1518.001 — Security Software Discovery**
+Identifying CrowdStrike Falcon agent version, CyberArk PAM endpoints, Palo Alto firewall models, and Microsoft Sentinel workspace configuration. Adversaries will specifically look for EDR/AV solutions before selecting or adapting evasion techniques. Identifying that CrowdStrike Falcon is in use means selecting post-exploitation tooling known to evade Falcon's specific behavioral detections.
+
+---
+
+### T1040 — Network Sniffing
+
+On internal network segments (co-location, core banking zone) where an attacker achieves server-level access, passive network capture can intercept internal API calls, database queries, and potentially credentials transmitted without TLS. Temenos T24 internal communication protocols and Oracle DB TNS traffic warrant particular attention.
+
+---
+
+### T1082 — System Information Discovery
+
+Enumerating OS versions, patch levels, installed software, and system configurations across Windows and Linux hosts. Specifically targeting: Temenos T24 version and installed customizations (legacy Java version confirmed as a gap), Oracle DB version, and RHEL kernel version for known privilege escalation CVEs.
+
+---
+
+## Tactic 10: Lateral Movement (TA0008)
+
+### T1021 — Remote Services
+
+**T1021.001 — Remote Desktop Protocol**
+RDP access to Windows servers using compromised privileged credentials. CyberArk vaults domain admin and other privileged accounts, but session hijacking of an active RDP session or use of credentials not yet vaulted (service accounts, local admin accounts) is possible. The management network zone should restrict RDP access, but firewall rule quality determines actual exposure.
+
+**T1021.002 — SMB/Windows Admin Shares**
+Lateral movement using NTLM hashes (pass-the-hash) or valid credentials over SMB to Windows Admin Shares (C$, ADMIN$). Standard post-exploitation technique enabling file copy and remote service execution across Windows servers in the same network zone.
+
+**T1021.004 — SSH**
+SSH-based lateral movement across the RHEL 8/9 server environment, including Temenos T24 Linux hosts. SSH key reuse across servers (a common administrative shortcut) means that a single compromised SSH key may provide access to multiple hosts. The Temenos environment's legacy Java components suggest potentially older administrative practices.
+
+---
+
+### T1534 — Internal Spearphishing
+
+Using a compromised M365 employee email account or Teams access to send targeted phishing messages to colleagues — particularly targeting SWIFT operators, Azure admins, and executives. Internal messages from known, legitimate accounts bypass most email security controls and carry high credibility.
+
+---
+
+### T1570 — Lateral Tool Transfer
+
+Moving attack tools, malware, and collected data between compromised hosts using SMB file shares, SharePoint Online document libraries, or Azure Blob Storage. Cloud storage services are particularly convenient channels as they are whitelisted in outbound firewall rules.
+
+---
+
+### T1210 — Exploitation of Remote Services
+
+Exploiting vulnerabilities in internal services reachable from a compromised host: Temenos T24's internal REST/SOAP APIs, Oracle DB listener (CVE-based), or internal web applications accessible within the corporate LAN. The legacy Java components in T24 customizations are a specific vulnerability surface for internal exploitation.
+
+---
+
+**Critical Lateral Movement Path: Corporate Network → SWIFT Secure Zone**
+
+The SWIFT Alliance Lite2 environment is in a dedicated SWIFT secure zone, separated by Palo Alto NGFW segmentation. The primary lateral movement path is:
+1. Initial foothold in office LAN or Azure
+2. Credential escalation to domain admin or a SWIFT operator account (via CyberArk compromise, credential dumping, or Kerberoasting)
+3. Exploitation of firewall rules permitting SWIFT zone access from authorized hosts
+4. Access to SWIFT operator workstation
+
+This path mirrors the documented APT38 intrusion methodology used in the Bangladesh Bank, Taiwan Far Eastern Bank, and FEIB attacks. Firewall rule quality and SWIFT operator workstation isolation are the decisive controls.
+
+---
+
+**Critical Lateral Movement Path: On-Premises AD → Azure**
+
+Compromise of the Azure AD Connect sync service account (which holds permissions to replicate objects between on-premises AD and Azure AD) enables escalation into Azure. Alternatively, Pass-the-Ticket or Golden SAML attacks using on-premises credentials federated to Azure AD. This path enables access to Azure DevOps, Azure cloud resources, and M365 data from an on-premises foothold.
+
+---
+
+## Tactic 11: Collection (TA0009)
+
+### T1213 — Data from Information Repositories
+
+**T1213.002 — SharePoint**
+SharePoint Online contains internal process documentation, including — critically — SWIFT payment authorization procedures, core banking system runbooks, network architecture diagrams, and security policy documents. This operational intelligence is essential for SWIFT fraud campaigns. Teams channels may also contain operational discussions about security configurations.
+
+**T1213.003 — Code Repositories**
+Azure DevOps repositories containing source code for web banking portal, mobile app backend, and Open Banking API services. Source code review identifies hardcoded credentials, internal API endpoints, business logic vulnerabilities, and cryptographic implementation weaknesses that can be exploited against production systems.
+
+---
+
+### T1114 — Email Collection
+
+**T1114.002 — Remote Email Collection**
+Using Microsoft Graph API or Exchange Web Services with compromised M365 credentials to bulk-collect email from finance team, SWIFT operators, and executive mailboxes. M365 provides programmatic email access that enables quiet mass collection without interactive login. SWIFT authorization workflow communications and payment approval chains are high-value collection targets.
+
+---
+
+### T1530 — Data from Cloud Storage Object
+
+Azure Blob Storage accounts may contain customer data exports, database backups, log archives, and application configuration files. Misconfigured storage account access policies (public access, overly permissive SAS tokens) or access via a compromised managed identity are the attack vectors. With cloud migration in progress, storage security controls are explicitly noted as being standardized — meaning current configurations may be inconsistent.
+
+---
+
+### T1005 — Data from Local System
+
+Collecting files from SWIFT operator workstations: SWIFT transaction logs, authorization keys, HSM PIN records, and screen captures of active payment sessions. On Temenos T24 admin workstations: Oracle DB connection strings, application configuration files with database credentials, and batch processing scripts.
+
+---
+
+### T1056 — Input Capture
+
+**T1056.001 — Keylogging**
+Keylogging on SWIFT operator workstations to capture SWIFT authentication credentials, one-time authorization codes, and HSM PINs during active sessions. Purpose-built SWIFT-targeting malware (EVTDIAG, custom RATs used by APT38) has included keylogging components specifically focused on capturing SWIFT operator activity.
+
+**T1056.004 — Credential API Hooking**
+Hooking Windows authentication APIs to capture credentials as they are entered, relevant for capturing CyberArk vault authentication and SWIFT operator credentials at the API level before they reach the authentication endpoint.
+
+---
+
+### T1560 — Archive Collected Data
+
+Compressing and encrypting collected customer PII, transaction records, and SWIFT-related data into password-protected archives before exfiltration. Chunking into small files to stay below DLP size thresholds. This preparation step typically occurs in a staging directory on a compromised server before exfiltration.
+
+---
+
+### T1602 — Data from Configuration Repository
+
+Collecting network device configurations from Palo Alto NGFW management interfaces (Panorama) if reachable: firewall rules, zone definitions, VPN configurations, and inter-zone access policies. This data maps the internal network segmentation and identifies firewall rules that permit SWIFT zone access — critical intelligence for the SWIFT-targeting attack chain.
+
+---
+
+## Tactic 12: Command and Control (TA0011)
+
+### T1071 — Application Layer Protocol
+
+**T1071.001 — Web Protocols (HTTPS)**
+HTTPS-based C2 is the primary channel for most threat actors targeting NordFinans. Traffic to Azure endpoints, Microsoft CDN ranges, and common cloud providers is allowed outbound by default — C2 hosted on Azure VMs or behind Azure Front Door is practically indistinguishable from NordFinans' own cloud traffic without deep SSL inspection and behavioral analytics on beacon patterns.
+
+**T1071.004 — DNS**
+DNS tunneling for C2, using high-frequency queries to attacker-controlled authoritative DNS servers. DNS is commonly permitted outbound and inspected less rigorously than HTTP/S. DNS-over-HTTPS further obscures tunneled traffic from network monitoring.
+
+---
+
+### T1090 — Proxy
+
+**T1090.003 — Multi-hop Proxy**
+Routing C2 traffic through multiple hops (TOR, commercial anonymization services, compromised third-party infrastructure) to obscure the true C2 origin from Sentinel network analytics and threat intelligence-based IP blocking.
+
+**T1090.004 — Domain Fronting**
+As noted in Defense Evasion, domain fronting via Azure Front Door or Azure CDN infrastructure is highly relevant given NordFinans' Azure dependence. C2 traffic presents as HTTPS to microsoft.com CDN domains.
+
+---
+
+### T1102 — Web Service
+
+**T1102.002 — Bidirectional Communication**
+Using legitimate SaaS services — OneDrive, Azure Blob Storage, GitHub, Slack-equivalent services — as C2 relay channels. Commands are posted to attacker-controlled storage as files; the implant polls and executes. This approach uses services that are explicitly trusted in NordFinans' network policy and generates traffic indistinguishable from legitimate use.
+
+---
+
+### T1573 — Encrypted Channel
+
+**T1573.002 — Asymmetric Cryptography**
+All C2 communications encrypted with asymmetric cryptography, making content inspection ineffective. Combined with domain fronting over HTTPS, this renders traditional network-based C2 detection largely ineffective — behavioral analytics (beacon timing, data volume patterns, connection anomalies) become the primary detection mechanism, which depends on Sentinel analytics rule quality.
+
+---
+
+### T1219 — Remote Access Software
+
+Abusing legitimate remote desktop/support tools (AnyDesk, TeamViewer, ConnectWise) that may be installed in the environment for IT support, including potentially by the Nordic MSSP for after-hours access. These tools generate authentic-looking traffic and are often whitelisted in EDR policies. The MSSP's access mechanisms warrant specific scrutiny here.
+
+---
+
+### T1572 — Protocol Tunneling
+
+SSH tunneling from compromised Linux servers (RHEL, Temenos T24 environment) to external attacker-controlled hosts. SSH is a legitimate administrative protocol and its traffic is generally trusted outbound from server environments, making SSH-tunneled C2 hard to distinguish from administrative activity without behavioral baselining.
+
+---
+
+## Tactic 13: Exfiltration (TA0010)
+
+### T1041 — Exfiltration Over C2 Channel
+
+Primary exfiltration method: data is exfiltrated over the established C2 channel (HTTPS). Collected customer PII, financial records, and SWIFT-related data transmitted through the same encrypted, cloud-blended channel used for C2. Detection depends on volume anomalies in Sentinel — unusual data volumes to specific cloud endpoints.
+
+---
+
+### T1567 — Exfiltration Over Web Service
+
+**T1567.002 — Exfiltration to Cloud Storage**
+Direct upload of collected data to attacker-controlled Azure Blob Storage accounts within the same Azure North Europe region as NordFinans. Traffic to Azure storage is trusted and high-volume in NordFinans' environment, making volume-based detection difficult. This technique exploits the cloud model — outbound data to Microsoft-owned infrastructure is practically unchecked.
+
+**T1567.004 — Exfiltration to Code Repository**
+Pushing collected data (as code commits or repository files) to attacker-controlled Azure DevOps or GitHub repositories. Particularly credible given that developer workstations regularly push code to these services.
+
+---
+
+### T1537 — Transfer Data to Cloud Account
+
+Staging collected data in a compromised Azure storage account within NordFinans' own Azure subscription before transferring to an external attacker-controlled account. Using AzCopy or Azure Storage Explorer with compromised credentials for large-scale data transfer. The internal staging step avoids triggering outbound data transfer alerts since the traffic stays within Azure.
+
+---
+
+### T1029 — Scheduled Transfer
+
+Timing exfiltration to coincide with periods of reduced detection capability: after 18:00 CET when the internal SOC hands off to the Nordic MSSP, or during overnight core banking batch processing windows when network traffic is naturally elevated. This is an operational security decision by the attacker that directly exploits the business-hours-only internal SOC limitation.
+
+---
+
+### T1048 — Exfiltration Over Alternative Protocol
+
+**T1048.003 — Exfiltration Over Unencrypted Non-C2 Protocol**
+DNS exfiltration — encoding data in DNS query strings to attacker-controlled authoritative DNS — as a low-bandwidth but resilient exfiltration channel. DNS is rarely fully inspected and is permitted outbound universally. Particularly relevant as a secondary exfiltration channel if primary HTTPS channels are blocked.
+
+---
+
+### T1020 — Automated Exfiltration
+
+Automated scripts that continuously collect and exfiltrate new customer transaction records or account data, potentially running for extended periods given the limited after-hours SOC detection capability. The MSSP monitoring NordFinans' after-hours environment may not have the contextual knowledge to distinguish automated exfiltration from legitimate scheduled data transfers (e.g., regulatory reporting, batch jobs).
+
+---
+
+## Tactic 14: Impact (TA0040)
+
+### T1657 — Financial Theft
+
+**This is the highest-impact scenario for NordFinans.**
+
+SWIFT fraud via unauthorized payment orders: following SWIFT operator credential compromise and SWIFT zone access, submitting fraudulent SWIFT MT103/MT202 messages to transfer funds from NordFinans correspondent accounts to attacker-controlled accounts. The Bangladesh Bank ($81M), FEIB, and Cosmos Bank ($13.5M) attacks demonstrate the established playbook. NordFinans' SWIFT CSCF v2024 attestation and HSM controls are the primary mitigations, but they depend on correct implementation and the integrity of SWIFT operator workstations.
+
+Customer account fraud: using stolen web/mobile banking credentials to initiate unauthorized account transfers or payment requests via the Open Banking payment initiation API (PSD2). At scale, automated account takeover against the 500,000 retail customer base is viable if credential stuffing yields a sufficient success rate.
+
+---
+
+### T1486 — Data Encrypted for Impact (Ransomware)
+
+Ransomware deployment targeting NordFinans' Windows endpoints, Windows Server 2019/2022 servers, RHEL servers, and Azure VMs. Financial sector ransomware campaigns (BlackCat/ALPHV, LockBit 3.0, Play) have specifically developed Linux/ESXI encryptors targeting RHEL and VMware environments. The Temenos T24 RHEL/Oracle DB environment is a direct target — encrypting the Oracle datafiles would halt core banking operations.
+
+Core banking RPO is 1 hour, RTO is 4 hours — achievable only if backups are intact. Modern ransomware operators specifically target and destroy backup infrastructure before deploying the encryptor. The partially air-gapped tape storage provides some protection, but Azure backup snapshots and WSUS/Intune-managed backup processes may be reachable and deletable from a compromised domain admin account.
+
+---
+
+### T1565 — Data Manipulation
+
+**T1565.001 — Stored Data Manipulation**
+Manipulating transaction records in the Temenos T24 Oracle DB — altering account balances, transaction histories, or credit limits to facilitate fraud or undermine data integrity. This is particularly destructive because it compromises the bank's ability to trust its own records, with regulatory and operational consequences that extend beyond immediate financial loss.
+
+**T1565.003 — Runtime Data Manipulation**
+Intercepting and altering in-flight payment data between core banking components during transaction processing. SWIFT-targeting malware (EVTDIAG) has historically been designed to intercept and modify transaction database records in real time to conceal fraudulent transfers.
+
+---
+
+### T1491 — Defacement
+
+**T1491.002 — External Defacement**
+Defacing the web banking portal (Azure App Service) or publishing false communications via NordFinans' web presence. For a publicly traded company, a credible-looking defacement or false announcement has immediate stock price and customer confidence implications, compounding financial impact beyond operational disruption.
+
+---
+
+### T1485 — Data Destruction
+
+Deleting Azure cloud resources, Azure AD objects, and on-premises Active Directory after SWIFT fraud execution — a documented APT38 tactic (wipers deployed post-fraud to impede forensics and recovery: WhiskeyMako, ClearSky, BLINDINGCAN). Destroying the Azure AD environment would disrupt authentication for cloud services, M365, and remote access simultaneously. Targeting backup infrastructure (Azure backup vaults, WSUS-managed backup agents) before deploying ransomware or wipers maximizes recovery difficulty.
+
+---
+
+### T1561 — Disk Wipe
+
+**T1561.002 — Disk Structure Wipe**
+MBR/VBR wipers targeting Temenos T24 Linux servers and Windows Servers — rendering systems unbootable without OS reinstallation. APT38's documented post-intrusion wiper deployment against banks that were SWIFT fraud targets (to destroy evidence and impede recovery) makes this directly relevant. The RHEL environment hosting T24 is the primary target.
+
+---
+
+### T1498 — Network Denial of Service
+
+DDoS attacks against the web banking portal (Azure App Service / Front Door) and Open Banking API gateway — used either as a distraction while SWIFT fraud is executed, or as standalone disruption. Azure Front Door provides DDoS protection (Azure DDoS Standard tier), but application-layer DDoS (HTTP flood against authenticated endpoints) is more difficult to mitigate at the CDN layer. Hacktivist groups have targeted Nordic financial institutions with DDoS (Pro-Russian hacktivist campaigns targeted Nordic banks in 2023).
+
+---
+
+### T1531 — Account Access Removal
+
+Locking out IT administrators and SOC analysts from critical systems during the incident response window — deleting or locking AD accounts, revoking Azure AD roles, and changing CyberArk vault credentials. This directly extends attacker dwell time and delays recovery. Effective execution requires prior compromise of Domain Admin and Azure Global Admin privileges.
+
+---
+
+### T1496 — Resource Hijacking
+
+Cryptomining in NordFinans' Azure cloud environment using compromised compute resources. Lower-sophistication impact that generates cost and performance degradation without immediate operational disruption. More commonly a secondary or opportunistic impact from an initial access campaign that was monetized differently than originally intended.
+
+---
+
+## Summary Risk Matrix
+
+| Tactic | Highest-Priority Threats | Key Organizational Enabler |
+|---|---|---|
+| Reconnaissance | OSINT via LinkedIn, job postings, annual reports | Publicly traded; regulatory disclosure obligations |
+| Resource Development | Typosquatting, SWIFT-aware custom malware | High-value SWIFT target; known tech stack |
+| Initial Access | AiTM phishing (M365), Trusted Relationship (MSSP/Temenos VPN), Supply Chain (DevOps) | MFA gap on internal apps; third-party risk maturity gap |
+| Execution | PowerShell LOLBins, Azure DevOps pipeline abuse | Windows-dominant endpoint estate; CI/CD access |
+| Persistence | Azure AD device/service principal manipulation, Hybrid AD backdoor | Azure AD Connect hybrid trust |
+| Privilege Escalation | Kerberoasting (service accounts), Legacy Java exploit (T24), KRBTGT compromise | Legacy components; ~3,500 AD accounts |
+| Defense Evasion | Domain fronting via Azure Front Door, CrowdStrike evasion, LSASS bypass | NordFinans itself uses Azure Front Door |
+| Credential Access | AiTM session cookie theft, MFA fatigue, LSASS dump, Kerberoasting | Push-notification MFA; hybrid AD; large account estate |
+| Discovery | BloodHound AD analysis, Azure resource enumeration, T24 service discovery | Large AD; expanding Azure footprint |
+| Lateral Movement | Corp AD → SWIFT zone (Palo Alto rule quality); On-prem AD → Azure (Azure AD Connect) | Segmentation quality; hybrid trust |
+| Collection | SharePoint SWIFT procedures, M365 email, Azure Blob backups | Sensitive ops docs in M365; cloud storage |
+| C2 | Azure-hosted C2, domain fronting, OneDrive as relay | Deep Azure integration makes cloud C2 invisible |
+| Exfiltration | Azure storage exfiltration, after-hours timing | After-hours SOC gap; cloud-trusted outbound |
+| Impact | SWIFT fraud + wiper (APT38 playbook), Ransomware (T24 Oracle/RHEL), Data manipulation | SWIFT access; T24 RHEL; limited after-hours detection |
+
+---
+
+*Analysis based on MITRE ATT&CK Enterprise v15. Fictional profile only. This assessment identifies threat relevance — it is not a penetration test finding or confirmed vulnerability.*

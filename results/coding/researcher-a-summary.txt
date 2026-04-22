@@ -1,0 +1,26 @@
+ Execution Order                                                                                                                                                                                        │
+│                                                                                                                                                                                                        │
+│ 1. Read all baseline response texts (response-2.txt, response-3.txt for scenarios only in runs 2/3)                                                                                                    │
+│ 2. Create data/coding/mappings/ directory                                                                                                                                                              │
+│ 3. Create traditional-mappings.csv — analyze all 38 threats, produce mappings                                                                                                                          │
+│ 4. Create baseline-mappings.csv — analyze all 11 scenarios, produce mappings                                                                                                                           │
+│ 5. Create scripts/populate-coding-worksheet.py                                                                                                                                                         │
+│ 6. Run with --dry-run, verify counts                                                                                                                                                                   │
+│ 7. Run to produce final researcher-a.csv                                                                                                                                                               │
+│ 8. Print summary for review        
+
+Key results:
+
+  ┌─────────────┬───────────────┬───────────────────┐
+  │   Method    │ Rows marked 1 │ Unique techniques │
+  ├─────────────┼───────────────┼───────────────────┤
+  │ Traditional │ 48            │ 40                │
+  ├─────────────┼───────────────┼───────────────────┤
+  │ Baseline    │ 50            │ 43                │
+  ├─────────────┼───────────────┼───────────────────┤
+  │ Structured  │ 96            │ 80 (unchanged)    │
+  └─────────────┴───────────────┴───────────────────┘
+
+  Overlap: 29 techniques found by all three methods. 35 techniques unique to structured, 4 unique to traditional, 1 unique to baseline.
+
+  Note on T-041 (after-hours SOC gap): No technique mapping created — it describes a strategic timing factor, not a specific TTP (per GP5). All other 37 verified threats were mapped.

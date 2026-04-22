@@ -1,0 +1,41 @@
+python scripts/package-manual-runs.py --variant baseline --input-dir data/llm/baseline 
+Variant:       baseline
+Prompt file:   data\llm\prompt-baseline.txt (8656 chars)
+Prompt hash:   4c03e875df475201...
+Response files: 3 found
+
+  response-1.txt: 25055 chars
+    Packaged -> data\llm\baseline\run-1.json
+  response-2.txt: 29616 chars
+    Packaged -> data\llm\baseline\run-2.json
+  response-3.txt: 24432 chars
+    Packaged -> data\llm\baseline\run-3.json
+
+Done. 3 runs packaged in: data/llm/baseline
+Next step: python scripts/consolidate-runs.py --input-dir data/llm/baseline
+
+
+
+
+
+python scripts/consolidate-runs.py --input-dir data/llm/baseline --output data/llm/baseline/consolidated.csv
+Loading runs from: data/llm/baseline
+  Loaded: run-1.json (25055 chars)
+  Loaded: run-2.json (29616 chars)
+  Loaded: run-3.json (24432 chars)
+  Loaded 3 runs.
+
+  Run 1: Extracted 40 threat entries.
+  Run 2: Extracted 45 threat entries.
+  Run 3: Extracted 11 threat entries.
+
+  NOTE: Automated extraction provides a starting point.
+  Researcher review is required for semantic matching across runs.
+  The 'run_N' columns should be verified manually.
+
+Consolidation summary (baseline variant):
+  Total unique threats extracted: 96
+  Included (≥2/3 runs):          0
+  Excluded (1/3 runs only):       96
+
+Consolidated output written to: data/llm/baseline/consolidated.csv

@@ -1,0 +1,236 @@
+technique_id,technique_name,tactic,traditional_match,llm_baseline_match,llm_structured_match,coder_id,confidence,notes,openai_structured_match,gemini_structured_match
+T1001,Data Obfuscation,command-and-control,0,0,0,reconciled,,,0,0
+T1003,OS Credential Dumping,credential-access,0,1,1,reconciled,clear,"base:B-001,B-002",0,1
+T1005,Data from Local System,collection,1,1,1,reconciled,clear,"base:B-002,B-007,B-012; trad:T-021,T-022; trad:T-021,T-022,T-036",1,0
+T1006,Direct Volume Access,defense-evasion,0,0,0,reconciled,,,0,0
+T1007,System Service Discovery,discovery,0,0,0,reconciled,,,0,0
+T1008,Fallback Channels,command-and-control,0,0,0,reconciled,,,0,0
+T1010,Application Window Discovery,discovery,0,0,0,reconciled,,,0,0
+T1011,Exfiltration Over Other Network Medium,exfiltration,0,0,0,reconciled,,,0,0
+T1012,Query Registry,discovery,0,0,0,reconciled,,,0,0
+T1014,Rootkit,defense-evasion,0,0,0,reconciled,,,0,0
+T1016,System Network Configuration Discovery,discovery,0,0,0,reconciled,,,1,0
+T1018,Remote System Discovery,discovery,0,1,0,reconciled,plausible,base:B-002; [reconciled: union],0,0
+T1020,Automated Exfiltration,exfiltration,0,0,0,reconciled,,,0,0
+T1021,Remote Services,lateral-movement,1,1,1,reconciled,clear,"base:B-001,B-002; trad:T-031,T-037",1,1
+T1025,Data from Removable Media,collection,0,0,0,reconciled,,,0,0
+T1027,Obfuscated Files or Information,defense-evasion,0,0,1,reconciled,clear,,1,1
+T1029,Scheduled Transfer,exfiltration,0,0,1,reconciled,clear,,0,0
+T1030,Data Transfer Size Limits,exfiltration,0,0,1,reconciled,clear,,0,0
+T1033,System Owner/User Discovery,discovery,0,0,0,reconciled,,,0,0
+T1036,Masquerading,defense-evasion,1,1,1,reconciled,clear,base:B-001; trad:T-037; [reconciled: union],0,0
+T1037,Boot or Logon Initialization Scripts,persistence,0,0,0,reconciled,,,0,0
+T1037,Boot or Logon Initialization Scripts,privilege-escalation,0,0,0,reconciled,,,0,0
+T1039,Data from Network Shared Drive,collection,0,0,0,reconciled,,,0,0
+T1040,Network Sniffing,credential-access,0,0,0,reconciled,,,0,0
+T1040,Network Sniffing,discovery,0,0,0,reconciled,,,0,0
+T1041,Exfiltration Over C2 Channel,exfiltration,1,1,1,reconciled,clear,base:B-001; trad:T-001; [reconciled: union],1,1
+T1046,Network Service Discovery,discovery,0,1,1,reconciled,clear,base:B-011; [reconciled: union],0,1
+T1047,Windows Management Instrumentation,execution,1,1,1,reconciled,clear,base:B-001; trad:T-037,0,0
+T1048,Exfiltration Over Alternative Protocol,exfiltration,0,0,1,reconciled,clear,,0,1
+T1049,System Network Connections Discovery,discovery,0,0,0,reconciled,,,0,0
+T1052,Exfiltration Over Physical Medium,exfiltration,0,0,0,reconciled,,,0,0
+T1053,Scheduled Task/Job,execution,0,0,1,reconciled,clear,,0,1
+T1053,Scheduled Task/Job,persistence,0,0,1,reconciled,clear,,0,1
+T1053,Scheduled Task/Job,privilege-escalation,0,0,1,reconciled,clear,,0,1
+T1055,Process Injection,defense-evasion,0,0,0,reconciled,,,0,0
+T1055,Process Injection,privilege-escalation,0,0,0,reconciled,,,0,0
+T1056,Input Capture,collection,1,0,0,reconciled,clear,"trad:T-013,T-034",1,0
+T1056,Input Capture,credential-access,1,0,0,reconciled,clear,"trad:T-013,T-034",1,0
+T1057,Process Discovery,discovery,0,0,0,reconciled,,,0,0
+T1059,Command and Scripting Interpreter,execution,1,1,1,reconciled,clear,base:B-002; trad:T-037; [reconciled: union],1,1
+T1068,Exploitation for Privilege Escalation,privilege-escalation,1,0,1,reconciled,clear,trad:T-027,1,1
+T1069,Permission Groups Discovery,discovery,0,1,1,reconciled,clear,base:B-001,0,0
+T1070,Indicator Removal,defense-evasion,1,1,1,reconciled,clear,base:B-002; trad:T-037; [reconciled: union],0,1
+T1071,Application Layer Protocol,command-and-control,1,0,1,reconciled,clear,trad:T-038; [reconciled: union],1,1
+T1072,Software Deployment Tools,execution,0,0,1,reconciled,clear,,0,0
+T1072,Software Deployment Tools,lateral-movement,0,0,1,reconciled,clear,,0,0
+T1074,Data Staged,collection,0,0,0,reconciled,,,0,0
+T1078,Valid Accounts,defense-evasion,1,1,1,reconciled,clear,"base:B-001,B-002,B-003,B-004,B-005,B-007,B-009,B-012,B-013,B-014; trad:T-001,T-004,T-009,T-010,T-016,T-022,T-031,T-033,T-039,T-040,T-043",1,1
+T1078,Valid Accounts,initial-access,1,1,1,reconciled,clear,"base:B-001,B-002,B-003,B-004,B-005,B-007,B-009,B-012,B-013,B-014; trad:T-001,T-004,T-009,T-010,T-016,T-022,T-031,T-033,T-039,T-040,T-043",1,1
+T1078,Valid Accounts,persistence,1,1,1,reconciled,clear,"base:B-001,B-002,B-003,B-004,B-005,B-007,B-009,B-012,B-013,B-014; trad:T-001,T-004,T-009,T-010,T-016,T-022,T-031,T-033,T-039,T-040,T-043",1,1
+T1078,Valid Accounts,privilege-escalation,1,1,1,reconciled,clear,"base:B-001,B-002,B-003,B-004,B-005,B-007,B-009,B-012,B-013,B-014; trad:T-001,T-004,T-009,T-010,T-016,T-022,T-031,T-033,T-039,T-040,T-043",1,1
+T1080,Taint Shared Content,lateral-movement,0,0,0,reconciled,,,0,0
+T1082,System Information Discovery,discovery,0,0,1,reconciled,clear,,0,0
+T1083,File and Directory Discovery,discovery,0,0,0,reconciled,,,1,0
+T1087,Account Discovery,discovery,0,1,1,reconciled,clear,base:B-001,0,1
+T1090,Proxy,command-and-control,0,0,1,reconciled,clear,,0,0
+T1091,Replication Through Removable Media,initial-access,0,0,0,reconciled,,,0,0
+T1091,Replication Through Removable Media,lateral-movement,0,0,0,reconciled,,,0,0
+T1092,Communication Through Removable Media,command-and-control,0,0,0,reconciled,,,0,0
+T1095,Non-Application Layer Protocol,command-and-control,0,0,0,reconciled,,,0,0
+T1098,Account Manipulation,persistence,1,1,1,reconciled,clear,base:B-013; trad:T-042,0,1
+T1098,Account Manipulation,privilege-escalation,1,1,1,reconciled,clear,base:B-013; trad:T-042,0,1
+T1102,Web Service,command-and-control,1,0,1,reconciled,clear,trad:T-038,0,0
+T1104,Multi-Stage Channels,command-and-control,0,0,0,reconciled,,,0,0
+T1105,Ingress Tool Transfer,command-and-control,0,0,0,reconciled,,,0,1
+T1106,Native API,execution,0,0,0,reconciled,,,0,0
+T1110,Brute Force,credential-access,1,1,1,reconciled,clear,"base:B-001,B-005; trad:T-009,T-010",1,0
+T1111,Multi-Factor Authentication Interception,credential-access,1,1,1,reconciled,clear,base:B-013; trad:T-006,0,0
+T1112,Modify Registry,defense-evasion,0,0,0,reconciled,,,0,0
+T1113,Screen Capture,collection,0,0,0,reconciled,,,0,0
+T1114,Email Collection,collection,1,1,1,reconciled,clear,base:B-013; trad:T-042,1,1
+T1115,Clipboard Data,collection,0,0,0,reconciled,,,0,0
+T1119,Automated Collection,collection,0,0,0,reconciled,,,0,0
+T1120,Peripheral Device Discovery,discovery,0,0,0,reconciled,,,0,0
+T1123,Audio Capture,collection,0,0,0,reconciled,,,0,0
+T1124,System Time Discovery,discovery,0,0,0,reconciled,,,0,0
+T1125,Video Capture,collection,0,0,0,reconciled,,,0,0
+T1127,Trusted Developer Utilities Proxy Execution,defense-evasion,0,0,0,reconciled,,,0,0
+T1129,Shared Modules,execution,0,0,0,reconciled,,,0,0
+T1132,Data Encoding,command-and-control,0,0,0,reconciled,,,0,0
+T1133,External Remote Services,initial-access,1,1,1,reconciled,clear,"base:B-001,B-002,B-009,B-011,B-012; trad:T-003,T-017,T-018",1,1
+T1133,External Remote Services,persistence,1,1,1,reconciled,clear,"base:B-001,B-002,B-009,B-011,B-012; trad:T-003,T-017,T-018",1,1
+T1134,Access Token Manipulation,defense-evasion,0,0,1,reconciled,clear,,0,0
+T1134,Access Token Manipulation,privilege-escalation,0,0,1,reconciled,clear,,0,0
+T1135,Network Share Discovery,discovery,0,0,0,reconciled,,,0,0
+T1136,Create Account,persistence,0,0,1,reconciled,clear,,1,1
+T1137,Office Application Startup,persistence,0,0,0,reconciled,,,0,0
+T1140,Deobfuscate/Decode Files or Information,defense-evasion,0,0,0,reconciled,,,0,0
+T1176,Browser Extensions,persistence,0,0,0,reconciled,,,0,0
+T1185,Browser Session Hijacking,collection,1,0,0,reconciled,plausible,trad:T-034; [reconciled: union],0,0
+T1187,Forced Authentication,credential-access,0,0,0,reconciled,,,0,0
+T1189,Drive-by Compromise,initial-access,0,0,0,reconciled,,,0,0
+T1190,Exploit Public-Facing Application,initial-access,1,1,1,reconciled,clear,"base:B-001,B-014; trad:T-003,T-021,T-028,T-029,T-030",1,1
+T1195,Supply Chain Compromise,initial-access,1,1,1,reconciled,clear,"base:B-004; trad:T-015,T-019",0,0
+T1197,BITS Jobs,defense-evasion,0,0,0,reconciled,,,0,0
+T1197,BITS Jobs,persistence,0,0,0,reconciled,,,0,0
+T1199,Trusted Relationship,initial-access,1,1,1,reconciled,clear,"base:B-004,B-009,B-011,B-012; trad:T-016,T-017,T-018,T-035",0,0
+T1200,Hardware Additions,initial-access,0,0,0,reconciled,,,0,0
+T1201,Password Policy Discovery,discovery,0,0,0,reconciled,,,0,0
+T1202,Indirect Command Execution,defense-evasion,0,0,0,reconciled,,,0,0
+T1203,Exploitation for Client Execution,execution,0,1,0,reconciled,plausible,base:B-002; [reconciled: union],1,0
+T1204,User Execution,execution,1,1,1,reconciled,clear,"base:B-002; trad:T-012,T-013",0,1
+T1205,Traffic Signaling,command-and-control,0,0,0,reconciled,,,0,0
+T1205,Traffic Signaling,defense-evasion,0,0,0,reconciled,,,0,0
+T1205,Traffic Signaling,persistence,0,0,0,reconciled,,,0,0
+T1207,Rogue Domain Controller,defense-evasion,0,0,0,reconciled,,,0,0
+T1210,Exploitation of Remote Services,lateral-movement,0,1,1,reconciled,clear,base:B-011,0,1
+T1211,Exploitation for Defense Evasion,defense-evasion,0,0,0,reconciled,,,0,0
+T1212,Exploitation for Credential Access,credential-access,0,0,0,reconciled,,,0,0
+T1213,Data from Information Repositories,collection,1,1,1,reconciled,clear,"base:B-009,B-013; trad:T-020,T-036,T-042",0,1
+T1216,System Script Proxy Execution,defense-evasion,0,0,0,reconciled,,,0,0
+T1217,Browser Information Discovery,discovery,0,0,0,reconciled,,,0,0
+T1218,System Binary Proxy Execution,defense-evasion,1,1,1,reconciled,clear,"base:B-001,B-002; trad:T-037",0,0
+T1219,Remote Access Software,command-and-control,0,0,0,reconciled,,,0,0
+T1220,XSL Script Processing,defense-evasion,0,0,0,reconciled,,,0,0
+T1221,Template Injection,defense-evasion,0,0,0,reconciled,,,0,0
+T1222,File and Directory Permissions Modification,defense-evasion,0,0,0,reconciled,,,0,0
+T1480,Execution Guardrails,defense-evasion,0,0,0,reconciled,,,0,0
+T1482,Domain Trust Discovery,discovery,0,0,0,reconciled,,,0,0
+T1484,Domain or Tenant Policy Modification,defense-evasion,0,0,1,reconciled,clear,,0,0
+T1484,Domain or Tenant Policy Modification,privilege-escalation,0,0,1,reconciled,clear,,0,0
+T1485,Data Destruction,impact,0,0,1,reconciled,clear,,0,0
+T1486,Data Encrypted for Impact,impact,1,1,1,reconciled,clear,"base:B-001; trad:T-001,T-002",1,1
+T1489,Service Stop,impact,0,0,0,reconciled,,,0,0
+T1490,Inhibit System Recovery,impact,1,1,1,reconciled,clear,"base:B-001; trad:T-001,T-002",0,0
+T1491,Defacement,impact,0,0,1,reconciled,clear,,0,0
+T1495,Firmware Corruption,impact,0,0,0,reconciled,,,0,0
+T1496,Resource Hijacking,impact,0,0,0,reconciled,,,0,0
+T1497,Virtualization/Sandbox Evasion,defense-evasion,0,0,0,reconciled,,,0,0
+T1497,Virtualization/Sandbox Evasion,discovery,0,0,0,reconciled,,,0,0
+T1498,Network Denial of Service,impact,1,0,1,reconciled,clear,"trad:T-023,T-026",0,0
+T1499,Endpoint Denial of Service,impact,1,0,0,reconciled,clear,"trad:T-024,T-026",1,0
+T1505,Server Software Component,persistence,0,1,1,reconciled,clear,"base:B-004,B-012",0,0
+T1518,Software Discovery,discovery,0,0,0,reconciled,,,0,0
+T1525,Implant Internal Image,persistence,0,0,0,reconciled,,,0,0
+T1526,Cloud Service Discovery,discovery,0,0,0,reconciled,,,0,0
+T1528,Steal Application Access Token,credential-access,1,1,1,reconciled,clear,"base:B-003; trad:T-033,T-042",0,1
+T1529,System Shutdown/Reboot,impact,0,0,0,reconciled,,,0,0
+T1530,Data from Cloud Storage,collection,1,1,1,reconciled,clear,"base:B-014; trad:T-020,T-039",0,1
+T1531,Account Access Removal,impact,0,0,0,reconciled,,,0,0
+T1534,Internal Spearphishing,lateral-movement,0,0,1,reconciled,clear,,0,0
+T1535,Unused/Unsupported Cloud Regions,defense-evasion,0,0,0,reconciled,,,0,0
+T1537,Transfer Data to Cloud Account,exfiltration,0,0,1,reconciled,clear,,0,0
+T1538,Cloud Service Dashboard,discovery,0,0,0,reconciled,,,0,0
+T1539,Steal Web Session Cookie,credential-access,1,1,1,reconciled,clear,"base:B-013; trad:T-006,T-011",0,0
+T1542,Pre-OS Boot,defense-evasion,0,0,0,reconciled,,,0,0
+T1542,Pre-OS Boot,persistence,0,0,0,reconciled,,,0,0
+T1543,Create or Modify System Process,persistence,0,0,1,reconciled,clear,,0,0
+T1543,Create or Modify System Process,privilege-escalation,0,0,1,reconciled,clear,,0,0
+T1546,Event Triggered Execution,persistence,0,0,0,reconciled,,,0,0
+T1546,Event Triggered Execution,privilege-escalation,0,0,0,reconciled,,,0,0
+T1547,Boot or Logon Autostart Execution,persistence,0,0,0,reconciled,,,1,0
+T1547,Boot or Logon Autostart Execution,privilege-escalation,0,0,0,reconciled,,,1,0
+T1548,Abuse Elevation Control Mechanism,defense-evasion,0,0,1,reconciled,clear,,0,1
+T1548,Abuse Elevation Control Mechanism,privilege-escalation,0,0,1,reconciled,clear,,0,1
+T1550,Use Alternate Authentication Material,defense-evasion,1,1,1,reconciled,clear,base:B-002; trad:T-006,0,1
+T1550,Use Alternate Authentication Material,lateral-movement,1,1,1,reconciled,clear,base:B-002; trad:T-006,0,1
+T1552,Unsecured Credentials,credential-access,1,1,1,reconciled,clear,base:B-014; trad:T-011,0,0
+T1553,Subvert Trust Controls,defense-evasion,1,0,0,reconciled,plausible,trad:T-012; [reconciled: union],0,0
+T1554,Compromise Host Software Binary,persistence,0,0,0,reconciled,,,0,0
+T1555,Credentials from Password Stores,credential-access,1,1,0,reconciled,clear,base:B-002; trad:T-011,1,1
+T1556,Modify Authentication Process,credential-access,0,0,1,reconciled,clear,,0,0
+T1556,Modify Authentication Process,defense-evasion,0,0,1,reconciled,clear,,0,0
+T1556,Modify Authentication Process,persistence,0,0,1,reconciled,clear,,0,0
+T1557,Adversary-in-the-Middle,collection,1,1,1,reconciled,clear,"base:B-004,B-013; trad:T-006",0,0
+T1557,Adversary-in-the-Middle,credential-access,1,1,1,reconciled,clear,"base:B-004,B-013; trad:T-006",0,0
+T1558,Steal or Forge Kerberos Tickets,credential-access,1,1,1,reconciled,clear,"base:B-001,B-002; trad:T-043",0,1
+T1559,Inter-Process Communication,execution,0,0,0,reconciled,,,0,0
+T1560,Archive Collected Data,collection,0,0,1,reconciled,clear,,0,0
+T1561,Disk Wipe,impact,0,0,1,reconciled,clear,,0,0
+T1562,Impair Defenses,defense-evasion,1,1,1,reconciled,clear,"base:B-001,B-009; trad:T-026; [reconciled: union]",1,1
+T1563,Remote Service Session Hijacking,lateral-movement,0,0,0,reconciled,,,0,0
+T1564,Hide Artifacts,defense-evasion,0,0,0,reconciled,,,0,0
+T1565,Data Manipulation,impact,0,1,1,reconciled,clear,"base:B-012,B-013",0,1
+T1566,Phishing,initial-access,1,1,1,reconciled,clear,"base:B-001,B-002,B-004,B-013; trad:T-004,T-005",1,1
+T1567,Exfiltration Over Web Service,exfiltration,1,1,1,reconciled,clear,base:B-001; trad:T-001; [reconciled: union],1,1
+T1568,Dynamic Resolution,command-and-control,0,0,1,reconciled,clear,,0,0
+T1569,System Services,execution,0,0,0,reconciled,,,0,0
+T1570,Lateral Tool Transfer,lateral-movement,0,0,1,reconciled,clear,,1,0
+T1571,Non-Standard Port,command-and-control,0,0,0,reconciled,,,0,0
+T1572,Protocol Tunneling,command-and-control,0,0,1,reconciled,clear,,0,0
+T1573,Encrypted Channel,command-and-control,0,0,0,reconciled,,,1,0
+T1574,Hijack Execution Flow,defense-evasion,0,0,0,reconciled,,,0,0
+T1574,Hijack Execution Flow,persistence,0,0,0,reconciled,,,0,0
+T1574,Hijack Execution Flow,privilege-escalation,0,0,0,reconciled,,,0,0
+T1578,Modify Cloud Compute Infrastructure,defense-evasion,0,0,0,reconciled,,,0,0
+T1580,Cloud Infrastructure Discovery,discovery,1,1,1,reconciled,clear,base:B-014; trad:T-039,0,0
+T1583,Acquire Infrastructure,resource-development,0,0,1,reconciled,clear,,0,1
+T1584,Compromise Infrastructure,resource-development,0,0,0,reconciled,,,0,0
+T1585,Establish Accounts,resource-development,0,0,1,reconciled,clear,,0,0
+T1586,Compromise Accounts,resource-development,0,0,0,reconciled,,,0,0
+T1587,Develop Capabilities,resource-development,0,0,1,reconciled,clear,,1,1
+T1588,Obtain Capabilities,resource-development,0,0,1,reconciled,clear,,1,0
+T1589,Gather Victim Identity Information,reconnaissance,0,0,0,reconciled,,,0,1
+T1590,Gather Victim Network Information,reconnaissance,0,0,1,reconciled,clear,,0,1
+T1591,Gather Victim Org Information,reconnaissance,0,0,1,reconciled,clear,,0,0
+T1592,Gather Victim Host Information,reconnaissance,0,0,1,reconciled,clear,,0,1
+T1593,Search Open Websites/Domains,reconnaissance,0,0,1,reconciled,clear,,0,1
+T1594,Search Victim-Owned Websites,reconnaissance,0,0,0,reconciled,,,0,0
+T1595,Active Scanning,reconnaissance,0,1,1,reconciled,clear,base:B-014; [reconciled: union],1,1
+T1596,Search Open Technical Databases,reconnaissance,0,0,1,reconciled,clear,,1,0
+T1597,Search Closed Sources,reconnaissance,0,0,1,reconciled,clear,,0,0
+T1598,Phishing for Information,reconnaissance,1,1,1,reconciled,clear,"base:B-001,B-002; trad:T-004",0,0
+T1599,Network Boundary Bridging,defense-evasion,0,0,0,reconciled,,,0,0
+T1600,Weaken Encryption,defense-evasion,0,0,0,reconciled,,,0,0
+T1601,Modify System Image,defense-evasion,0,0,0,reconciled,,,0,0
+T1602,Data from Configuration Repository,collection,0,0,0,reconciled,,,0,0
+T1606,Forge Web Credentials,credential-access,0,0,0,reconciled,,,0,0
+T1608,Stage Capabilities,resource-development,0,0,0,reconciled,,,0,0
+T1609,Container Administration Command,execution,0,0,0,reconciled,,,0,0
+T1610,Deploy Container,defense-evasion,0,0,0,reconciled,,,0,0
+T1610,Deploy Container,execution,0,0,0,reconciled,,,0,0
+T1611,Escape to Host,privilege-escalation,0,0,1,reconciled,clear,,0,0
+T1612,Build Image on Host,defense-evasion,0,0,0,reconciled,,,0,0
+T1613,Container and Resource Discovery,discovery,0,0,0,reconciled,,,0,0
+T1614,System Location Discovery,discovery,0,0,0,reconciled,,,0,0
+T1615,Group Policy Discovery,discovery,0,0,0,reconciled,,,0,0
+T1619,Cloud Storage Object Discovery,discovery,0,0,0,reconciled,,,0,0
+T1620,Reflective Code Loading,defense-evasion,0,0,0,reconciled,,,0,0
+T1621,Multi-Factor Authentication Request Generation,credential-access,0,0,0,reconciled,,,0,0
+T1622,Debugger Evasion,defense-evasion,0,0,0,reconciled,,,0,0
+T1622,Debugger Evasion,discovery,0,0,0,reconciled,,,0,0
+T1647,Plist File Modification,defense-evasion,0,0,0,reconciled,,,0,0
+T1648,Serverless Execution,execution,0,0,0,reconciled,,,0,0
+T1649,Steal or Forge Authentication Certificates,credential-access,0,0,0,reconciled,,,0,0
+T1650,Acquire Access,resource-development,0,0,0,reconciled,,,0,0
+T1651,Cloud Administration Command,execution,0,0,0,reconciled,,,0,0
+T1652,Device Driver Discovery,discovery,0,0,0,reconciled,,,0,0
+T1653,Power Settings,persistence,0,0,0,reconciled,,,0,0
+T1654,Log Enumeration,discovery,0,0,0,reconciled,,,0,0
+T1656,Impersonation,defense-evasion,1,1,0,reconciled,clear,base:B-013; trad:T-005; [reconciled: union],0,0
+T1657,Financial Theft,impact,1,1,1,reconciled,clear,"base:B-002,B-003,B-005,B-007,B-011,B-013; trad:T-005,T-018,T-031,T-033,T-035",0,0
+T1659,Content Injection,command-and-control,0,0,0,reconciled,,,0,0
+T1659,Content Injection,initial-access,0,0,0,reconciled,,,0,0
+T1665,Hide Infrastructure,command-and-control,0,0,0,reconciled,,,0,0

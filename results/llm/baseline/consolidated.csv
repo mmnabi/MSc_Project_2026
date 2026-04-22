@@ -1,0 +1,16 @@
+threat_id,technique_id,threat_description,theme,run_1,run_2,run_3,included
+B-001,,After-Hours Ransomware Deployment via Active Directory Compromise,ransomware,1,1,1,1
+B-002,,SWIFT Messaging Fraud via Compromised Operator Credentials or Lateral Movement into SWIFT Secure Zone,swift_fraud,1,1,1,1
+B-003,,Compromised Third-Party TPP Leading to Unauthorized PSD2 Payment Initiation at Scale,tpp_openbanking,1,1,1,1
+B-004,,CI/CD Pipeline Compromise in Azure DevOps Leading to Malicious Code Injection into Production Banking Applications,cicd_pipeline,1,1,1,1
+B-005,,Credential Stuffing Campaign Against Web and Mobile Banking Platforms,credential_stuffing,1,1,0,1
+B-006,,Nation-State Cyber Espionage Targeting Financial and Customer Intelligence,espionage_apt,1,0,0,0
+B-007,,Privileged Insider Threat — SWIFT or Core Banking Operator Fraud,insider_threat,1,0,1,1
+B-008,,Exploitation of Legacy T24 Java Components for Internal Lateral Movement or Code Execution,t24_legacy,1,0,0,0
+B-009,,Nordic MSSP Compromise Used as Pivot into NordFinans Infrastructure,mssp_supply_chain,1,1,0,1
+B-010,,DDoS Campaign Against Web/Mobile Banking — Financially or Politically Motivated,ddos,1,0,0,0
+B-011,,Euronet ATM Processor Compromise Leading to Core Banking Lateral Movement,atm,0,1,1,1
+B-012,,Temenos T24 Vendor Support VPN Exploitation,vendor_vpn,0,1,1,1
+B-013,,Targeted Spearphishing Campaign Exploiting M365 to Conduct Business Email Compromise (BEC) Against Treasury Operations,bec,0,1,1,1
+B-014,,Azure Cloud Misconfiguration Exploitation During Migration,cloud_misconfig,0,1,1,1
+B-015,,Exploitation of After-Hours SOC Gap for Dwell-Time Attacks,soc_gap,0,0,1,0

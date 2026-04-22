@@ -1,0 +1,32 @@
+scope,tactic,method,kappa,n,agreement_pct,interpretation,threshold
+overall,all,Traditional (ISO 27005),0.881,235,96.2,Almost perfect,ADEQUATE — proceed with reconciled dataset
+overall,all,LLM Baseline,0.91,235,97.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+overall,all,LLM Structured,1.0,235,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,collection,Traditional (ISO 27005),0.876,17,94.1,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,collection,LLM Structured,1.0,17,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,command-and-control,Traditional (ISO 27005),0.64,18,94.4,Substantial (adequate),ADEQUATE — proceed with reconciled dataset
+per-tactic,command-and-control,LLM Structured,1.0,18,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,credential-access,Traditional (ISO 27005),1.0,17,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,credential-access,LLM Structured,1.0,17,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,defense-evasion,Traditional (ISO 27005),0.479,43,88.4,Moderate,BELOW THRESHOLD — flag as validity constraint
+per-tactic,defense-evasion,LLM Structured,1.0,43,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,discovery,Traditional (ISO 27005),1.0,32,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,discovery,LLM Structured,1.0,32,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,execution,Traditional (ISO 27005),1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,execution,LLM Structured,1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,exfiltration,Traditional (ISO 27005),-0.125,9,77.8,Slight/poor,BELOW THRESHOLD — flag as validity constraint
+per-tactic,exfiltration,LLM Structured,1.0,9,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,impact,Traditional (ISO 27005),1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,impact,LLM Structured,1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,initial-access,Traditional (ISO 27005),1.0,10,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,initial-access,LLM Structured,1.0,10,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,lateral-movement,Traditional (ISO 27005),1.0,9,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,lateral-movement,LLM Structured,1.0,9,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,persistence,Traditional (ISO 27005),1.0,20,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,persistence,LLM Structured,1.0,20,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,privilege-escalation,Traditional (ISO 27005),1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,privilege-escalation,LLM Structured,1.0,14,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,reconnaissance,Traditional (ISO 27005),1.0,10,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,reconnaissance,LLM Structured,1.0,10,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset
+per-tactic,resource-development,Traditional (ISO 27005),,8,100.0,Slight/poor,BELOW THRESHOLD — flag as validity constraint
+per-tactic,resource-development,LLM Structured,1.0,8,100.0,Almost perfect,ADEQUATE — proceed with reconciled dataset

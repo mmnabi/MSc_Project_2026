@@ -1,0 +1,11 @@
+comparison,method_a,method_b,jaccard,shared,a_only,b_only,a_total,b_total,union
+Traditional vs LLM-Baseline (Claude),Traditional,LLM-Baseline (Claude),0.667,36,8,10,44,46,54
+Traditional vs LLM-Structured (Claude),Traditional,LLM-Structured (Claude),0.442,38,6,42,44,80,86
+Traditional vs LLM-Structured (Gemini),Traditional,LLM-Structured (Gemini),0.355,22,22,18,44,40,62
+Traditional vs LLM-Structured (GPT-4o),Traditional,LLM-Structured (GPT-4o),0.321,18,26,12,44,30,56
+LLM-Baseline (Claude) vs LLM-Structured (Claude),LLM-Baseline (Claude),LLM-Structured (Claude),0.5,42,4,38,46,80,84
+LLM-Baseline (Claude) vs LLM-Structured (Gemini),LLM-Baseline (Claude),LLM-Structured (Gemini),0.433,26,20,14,46,40,60
+LLM-Baseline (Claude) vs LLM-Structured (GPT-4o),LLM-Baseline (Claude),LLM-Structured (GPT-4o),0.267,16,30,14,46,30,60
+LLM-Structured (Claude) vs LLM-Structured (Gemini),LLM-Structured (Claude),LLM-Structured (Gemini),0.446,37,43,3,80,40,83
+LLM-Structured (Claude) vs LLM-Structured (GPT-4o),LLM-Structured (Claude),LLM-Structured (GPT-4o),0.25,22,58,8,80,30,88
+LLM-Structured (Gemini) vs LLM-Structured (GPT-4o),LLM-Structured (Gemini),LLM-Structured (GPT-4o),0.346,18,22,12,40,30,52
